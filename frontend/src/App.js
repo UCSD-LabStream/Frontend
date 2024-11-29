@@ -6,6 +6,8 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2'
 import ThreeD from './3D';
 
+let i = 0;
+
 function App() {
 	const [sliderInput, handleSliderUpdate] = useState({
         angle1: 0,

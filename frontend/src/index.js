@@ -16,8 +16,6 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/help" element={<HelpPage />} />
-      {/* <Route path="/3D" element={<ThreeD />} />
-      <Route path="/2D" element={<TwoD />} /> */}
     </Routes>
   </BrowserRouter>
 );

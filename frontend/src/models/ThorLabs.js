@@ -18,7 +18,7 @@ function ModelRender({ url }) {
 const ThorLabs = () => {
     return (
         <Canvas
-            style={{ height: '70vh', width: '80vw' }} 
+            style={{ height: '100%' }} 
             camera={{ position: [2, 2, 0], fov: 40 }}
         >
             <Suspense fallback={null}>

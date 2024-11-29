@@ -25,7 +25,7 @@ function generatePlanarGrid( n ) {
 const PlanarGrid = () => {
     return (
         <Canvas
-            style={{ height: '70vh', width: '90vw', border: '3px solid white' }}
+            style={{ height: '100%' }}
             // Camera position (IMPORTANT)
             camera={{ position: [30, 30, 30], fov: 50 }}
         >

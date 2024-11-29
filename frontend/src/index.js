@@ -5,15 +5,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import TwoD from './2D';
 import './index.css';
 import App from './App';
-import Navbar from './Navbar';
+import { NavBar } from './Navbar';
+import HelpPage from './pages/HelpPage.js';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Navbar />
+    <NavBar />
     <Routes>
       <Route path="/" element={<App />} />
+      <Route path="/help" element={<HelpPage />} />
       {/* <Route path="/3D" element={<ThreeD />} />
       <Route path="/2D" element={<TwoD />} /> */}
     </Routes>

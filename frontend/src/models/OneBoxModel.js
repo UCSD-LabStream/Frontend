@@ -32,7 +32,7 @@ const Box = (props) => {
 const OneBoxModel = () => {
     return (
         <Canvas
-            style={{ height: '100vh', width: '100vw' }} // Fullscreen Canvas
+            style={{ height: '100%' }} // Fullscreen Canvas
             camera={{ position: [0, 0, 10], fov: 50 }}
         >
             <ambientLight intensity={Math.PI / 2} />

@@ -1,0 +1,9 @@
+.stdLabel {
+    display: flex;
+    min-width: 50px;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    color: white;
+}

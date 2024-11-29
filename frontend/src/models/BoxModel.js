@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei'; // Import OrbitControls
-import { autoType } from 'd3';
 
 // Box component as a functional component
 const Box = (props) => {

@@ -17,7 +17,7 @@ const STLModel = () => {
     console.log("rendering STL model.");
     return (
         <Canvas
-            style={{ height: '100vh', width: '100vw' }} // Fullscreen Canvas
+            style={{ height: '100%' }} // Fullscreen Canvas
             camera={{ position: [100, 100, 100], fov: 50 }}
         >
             <Suspense fallback={null}>

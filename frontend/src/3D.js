@@ -8,6 +8,7 @@ import MultiModel from './models/MultiModel'
 import MultiModel2 from './models/MultiModel2'
 import PlanarGrid from './models/Grid';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import FourierOptics from './models/FourierOptics';
 
 function ThreeD() {
     const [selectedModel, selectModelType] = useState("None")
@@ -27,7 +28,8 @@ function ThreeD() {
         'ThorLabs': <ThorLabs />,
         'PlanarGrid': <PlanarGrid />,
         'LabeledMulti1': <MultiModel />,
-        'LabeledMulti2': <MultiModel2 />
+        'LabeledMulti2': <MultiModel2 />,
+        'FourierOptics': <FourierOptics />
     }
 
     return (
@@ -50,11 +52,11 @@ function ThreeD() {
                     </FormControl>
                 </div>
             </div>
-            <div style={{marginTop:40}}>
-            {
-                // Display the selected model
-                modelMap[selectedModel]
-            }
+            <div style={{ marginTop: 40 }}>
+                {
+                    // Display the selected model
+                    modelMap[selectedModel]
+                }
             </div>
         </div>
     );

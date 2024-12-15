@@ -4,7 +4,8 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import StandardLabel from './StandardLabel';
+import StandardLabel from './labels/StandardLabel';
+import SliderLabel from './labels/SliderLabel';
 import './modelStyles.scss'
 
 function ModelRender({ url, position, label, labelPosition }) {
@@ -58,14 +59,17 @@ function BoxRender({ position, label, labelPosition }) {
 
     useEffect(() => {
         if (!clicked) return;
-
+    
         const handleClickOutside = (event) => {
-            setClicked(false);
+            const targetElement = document.getElementById("slider-label");
+            if (targetElement && !targetElement.contains(event.target)) {
+                setClicked(false);
+            }
         };
-
+    
         document.addEventListener("click", handleClickOutside);
         return () => document.removeEventListener("click", handleClickOutside);
-    }, [clicked]);
+    }, [clicked]);    
 
     return (
         <>
@@ -83,7 +87,7 @@ function BoxRender({ position, label, labelPosition }) {
             </mesh>
             {clicked && (
                 <Html position={labelPosition} center>
-                    <StandardLabel 
+                    <SliderLabel 
                         title={label}
                         showLabel={setClicked}
                     />
@@ -108,7 +112,7 @@ const MultiModel = () => {
                 <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
                 <ModelRender url="/ThorLabsSTLs/TR2-Solidworks.stl" position={[1, -1, 0]} label="part 2" labelPosition={[1, 0, 0]} />
                 <ModelRender url="/ThorLabsSTLs/TR2-Solidworks.stl" position={[-1, -1, 0]} label="part 1" labelPosition={[-1, 0, 0]} />
-                <BoxRender position={[0, -1, 0]} label="Box" labelPosition={[0, 0, 0]} />
+                <BoxRender position={[0, -1, 0]} label="Adjustable box" labelPosition={[0, 0.5, 0]} />
             </Suspense>
             <OrbitControls
                 enablePan={false}           // Disable panning

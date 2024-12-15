@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import BoxModel from './models/BoxModel'
-import OneBoxModel from './models/OneBoxModel'
-import STLModel from './models/STLModel'
 import ThorLabs from './models/ThorLabs'
 import MultiModel from './models/MultiModel'
 import MultiModel2 from './models/MultiModel2'
@@ -33,8 +31,9 @@ function ThreeD() {
     }
 
     return (
-        <div className="ThreeD-wrapper">
-            <div className="intro-card">
+        <>
+            {/* <div className="intro-card"> */}
+            <div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <p>Welcome to LabStream 3D. Select a model to view.</p>
                     <FormControl variant="outlined" sx={{ minWidth: 'auto', width: 'auto' }}>
@@ -58,7 +57,7 @@ function ThreeD() {
                     modelMap[selectedModel]
                 }
             </div>
-        </div>
+        </>
     );
 }
 

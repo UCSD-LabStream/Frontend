@@ -1,0 +1,21 @@
+input[type="text"],
+input[type="email"],
+input[type="datetime-local"] {
+  color: white !important; /* Input text color */
+}
+
+label {
+  color: white !important; /* Label text color */
+}
+
+h4 {
+  color: white !important; /* Label text color */
+}
+
+h2 {
+  color: white !important; /* Label text color */
+}
+
+input::placeholder {
+  color: white !important; /* Placeholder text color */
+}

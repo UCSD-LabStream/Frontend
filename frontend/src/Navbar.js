@@ -10,14 +10,28 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
+import { useUser } from './components/UserContext';
+import { signOut } from 'firebase/auth';
+import { auth } from './Firebase/firebase';
 
-const pages = ['Help', 'Booking', 'Log Out'];
+const pages = ['Help', 'Booking', 'Slots', 'Log Out'];
 
 export const NavBar = () => {
     const navigate = useNavigate();
+    const { setUser } = useUser();
 
-    const handleLogOut = () => {
-        console.log("handling logout");
+    const handleLogOut = async () => {
+      const confirmation = window.confirm("Are you sure you want to log out?");
+      if (confirmation) {
+        try{
+          console.log("handling logout");
+          await signOut(auth);
+          setUser(null);
+          navigate('/splashscreen');
+      } catch(error){
+        console.error("Error logging out");
+      }
+    }
     }
   
     const handleNavigation = (page) => { 

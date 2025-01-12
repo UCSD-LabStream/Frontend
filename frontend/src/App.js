@@ -125,7 +125,6 @@ function App() {
 
 						<div style={{ display: 'flex', flexDirection: 'row', marginTop: 20, width: '100%' }}>
 							<Typography textAlign='left' style={{ marginLeft: 3 }} >Image motor</Typography>
-							<Typography textAlign='left' style={{ marginLeft: 3 }} >Filter motor</Typography>
 							<IconButton onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: -1 * (isImageTwoTimes ? 2 : 1)}); console.log(motorInput)}}>
 								<RotateLeft />
 							</IconButton>

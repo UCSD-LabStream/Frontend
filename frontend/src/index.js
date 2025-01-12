@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import ThreeD from './3D';
-// import TwoD from './2D';
 import './index.css';
 import App from './App';
 import { NavBar } from './Navbar';

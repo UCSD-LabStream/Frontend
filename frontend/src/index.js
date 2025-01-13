@@ -14,6 +14,7 @@ import reportWebVitals from './reportWebVitals';
 import ProtectedRoutes from './components/ProtectedRoutes.js';
 import ProfessorRoute from './components/ProfessorRoute.js';
 import UserProvider from './components/UserContext.js'
+import Trial from './pages/Trial.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -24,6 +25,7 @@ root.render(
         <Route path="/splashscreen" element={<SplashScreen/>} />
         <Route path="/splashscreen/Login" element={<Login/>} />
         <Route path="/splashscreen/Signup" element={<SignUp/>} />
+        <Route path="/splashscreen/Trial" element={<Trial/>} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<App />} />
           <Route path="/help" element={<HelpPage />} />

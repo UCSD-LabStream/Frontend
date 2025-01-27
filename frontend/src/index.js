@@ -15,6 +15,8 @@ import ProtectedRoutes from './components/ProtectedRoutes.js';
 import ProfessorRoute from './components/ProfessorRoute.js';
 import UserProvider from './components/UserContext.js'
 import Trial from './pages/Trial.js';
+import MySlots from './MySlots.js';
+import SlotsCalendar from './SlotsCalendar.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +36,8 @@ root.render(
           {/* Nested Protected Route for Professors */}
           <Route element={<ProfessorRoute />}>
             <Route path="/Slots" element={<SlotCreation />} />
+            <Route path="/MySlots" element={<MySlots />} />
+            <Route path="/calendar" element={<SlotsCalendar />} />
           </Route>
         </Route>
         {/* <Route path="/3D" element={<ThreeD />} />

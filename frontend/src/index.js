@@ -18,7 +18,7 @@ import Trial from './pages/Trial.js';
 import MySlots from './MySlots.js';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
-// import SlotsCalendar from './SlotsCalendar.js';
+import SlotsCalendar from './SlotsCalendar.js';
 
 
 
@@ -63,7 +63,7 @@ root.render(
           <Route element={<ProfessorRoute />}>
             <Route path="/Slots" element={<SlotCreation />} />
             <Route path="/MySlots" element={<MySlots />} />
-            {/* <Route path="/calendar" element={<SlotsCalendar />} /> */}
+            <Route path="/calendar" element={<SlotsCalendar />} />
           </Route>
         </Route>
         {/* <Route path="/3D" element={<ThreeD />} />

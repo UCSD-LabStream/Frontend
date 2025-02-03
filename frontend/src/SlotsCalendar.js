@@ -1,72 +1,46 @@
-import React, { useState } from 'react';
+import React from "react";
 
-// Time slots for the calendar (from 8:00 AM to 8:00 PM, hourly intervals)
-const timeSlots = [
-    "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
-    "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
-    "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM"
-];
-
-const generateTimeGrid = () => {
-    const grid = [];
-    for (let i = 0; i < timeSlots.length; i++) {
-        grid.push(timeSlots[i]);
-    }
-    return grid;
-};
+const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const hoursOfDay = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 
 const SlotsCalendar = () => {
-    const [selectedSlots, setSelectedSlots] = useState([]);
-    const [timeGrid] = useState(generateTimeGrid());
+  return (
+    <div className="w-full p-4 overflow-x-auto">
+      <div className="grid grid-cols-8 border border-gray-300">
+        {/* Header Row */}
+        <div className="border-r border-gray-300 bg-white p-2 text-center font-bold">Time</div>
+        {daysOfWeek.map((day) => (
+          <div key={day} className="border-r border-gray-300 bg-white p-2 text-center font-bold">
+            {day}
+          </div>
+        ))}
+      </div>
 
-    // Handle time slot selection
-    const handleSlotSelection = (slot) => {
-        setSelectedSlots((prev) => {
-            if (prev.includes(slot)) {
-                return prev.filter((time) => time !== slot); // Deselect if already selected
-            }
-            return [...prev, slot]; // Add if not selected
-        });
-    };
-
-    return (
-        <div>
-            <h3 style={{ color:"white"}}>Select Multiple Time Slots</h3>
-
-            {/* Grid of Time Slots */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-                {timeGrid.map((slot, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleSlotSelection(slot)}
-                        style={{
-                            backgroundColor: selectedSlots.includes(slot) ? 'green' : 'lightgray',
-                            padding: '10px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            borderRadius: '5px',
-                            textAlign: 'center',
-                        }}
-                    >
-                        {slot}
-                    </button>
-                ))}
+      {/* Time Grid */}
+      <div className="grid grid-cols-8 border border-gray-300">
+        {/* Time Column */}
+        <div className="border-r border-gray-300">
+          {hoursOfDay.map((hour) => (
+            <div key={hour} className="h-10 border-b border-gray-300 bg-white flex items-center justify-center">
+              {hour}
             </div>
-
-            {selectedSlots.length > 0 && (
-                <div style={{ marginTop: '20px' }}>
-                    <h4 style={{ color:"white"}}>Selected Time Slots</h4>
-                    <ul>
-                        {selectedSlots.map((slot, index) => (
-                            <li key={index} style={{ color:"white"}}>{slot}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+          ))}
         </div>
-    );
-};
 
+        {/* Day Columns */}
+        {daysOfWeek.map((day) => (
+          <div key={day} className="border-r border-gray-300">
+            {hoursOfDay.map((hour) => (
+              <div
+                key={`${day}-${hour}`}
+                className="h-10 border-b border-gray-300 bg-white hover:bg-green-300"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default SlotsCalendar;

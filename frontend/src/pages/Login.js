@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom'; 
-import 'materialize-css/dist/css/materialize.min.css';
+// import 'materialize-css/dist/css/materialize.min.css';
 import './styles.css';
+import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
 import { useUser } from '../components/UserContext';
 
 const Login = () => {
@@ -32,35 +33,59 @@ const Login = () => {
     };
 
     return (
-        <div className="container" style={{ marginTop: '50px' }}>
-            <form onSubmit={handleLogin}>
-                <h2 className="center-align">Login</h2>
-                {error && <p className="red-text center-align">{error}</p>}
-                <div className="input-field">
-                    <input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="email">Email:</label>
-                </div>
-                <div className="input-field">
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="password">Password:</label>
-                </div>
-                <button type="submit" className="btn waves-effect waves-light" disabled={isLoading}>
-                    {isLoading ? "Logging in..." : "Login"}
-                </button>
-            </form>
+    <Container style={{ marginTop: '50px' }}>
+      <form onSubmit={handleLogin}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Login
+        </Typography>
+
+        {error && (
+          <Typography color="error" align="center" paragraph>
+            {error}
+          </Typography>
+        )}
+
+        <div style={{ marginBottom: '16px' }}>
+          <TextField
+            id="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            required
+            variant="outlined"
+            margin="normal"
+          />
         </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            required
+            variant="outlined"
+            margin="normal"
+          />
+        </div>
+
+        <div style={{ marginTop: '20px' }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
+          </Button>
+        </div>
+      </form>
+    </Container>
     );
 };
 

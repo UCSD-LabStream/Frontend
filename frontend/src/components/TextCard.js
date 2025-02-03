@@ -17,7 +17,7 @@ const styles = {
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       width: '300px',
       margin: '10px',
-      border: '8px solid rgb(1, 149, 165)',
+      border: '8px solid #23486A',
     },
     title: {
       fontSize: '18px',

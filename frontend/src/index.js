@@ -16,11 +16,37 @@ import ProfessorRoute from './components/ProfessorRoute.js';
 import UserProvider from './components/UserContext.js'
 import Trial from './pages/Trial.js';
 import MySlots from './MySlots.js';
-import SlotsCalendar from './SlotsCalendar.js';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from "@mui/material/CssBaseline";
+// import SlotsCalendar from './SlotsCalendar.js';
+
+
+
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#23486A',
+    },
+    secondary: {
+      main: '#EFB036',
+    },
+    background: {
+      default: '#3B6790',
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#ffffff',
+      disabled: '#ffffff',
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserProvider>
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
     <BrowserRouter>
       <NavBar />
       <Routes>
@@ -37,13 +63,14 @@ root.render(
           <Route element={<ProfessorRoute />}>
             <Route path="/Slots" element={<SlotCreation />} />
             <Route path="/MySlots" element={<MySlots />} />
-            <Route path="/calendar" element={<SlotsCalendar />} />
+            {/* <Route path="/calendar" element={<SlotsCalendar />} /> */}
           </Route>
         </Route>
         {/* <Route path="/3D" element={<ThreeD />} />
         <Route path="/2D" element={<TwoD />} /> */}
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
   </UserProvider>
 );
 

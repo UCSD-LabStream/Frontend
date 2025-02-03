@@ -1,12 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import BoxModel from './models/BoxModel'
-import ThorLabs from './models/ThorLabs'
-import MultiModel from './models/MultiModel'
-import MultiModel2 from './models/MultiModel2'
-import PlanarGrid from './models/Grid';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import FourierOptics from './models/FourierOptics';
+import ClickableFourierOptics from './models/ClickableFourierOptics';
 
 function ThreeD() {
     const [selectedModel, selectModelType] = useState("None")
@@ -22,12 +17,14 @@ function ThreeD() {
 
     const modelMap = {
         'None': <div />,
-        'boxes': <BoxModel />,
-        'ThorLabs': <ThorLabs />,
-        'PlanarGrid': <PlanarGrid />,
-        'LabeledMulti1': <MultiModel />,
-        'LabeledMulti2': <MultiModel2 />,
-        'FourierOptics': <FourierOptics />
+        // 'boxes': <BoxModel />,
+        // 'ThorLabs': <ThorLabs />,
+        // 'PlanarGrid': <PlanarGrid />,
+        // 'LabeledMulti1': <MultiModel />,
+        // 'LabeledMulti2': <MultiModel2 />,
+        // 'FourierOpticsTest': <FourierOpticsTest />,
+        // 'FourierOptics': <FourierOptics />,
+        'ClickableFourierOptics': <ClickableFourierOptics />
     }
 
     return (

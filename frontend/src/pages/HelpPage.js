@@ -24,6 +24,7 @@ const HelpPage = () => {
             sx={{
                 mt: 4,
                 mb: 4,
+                backgroundColor: '#182B49',
                 padding: 4,
                 borderRadius: 2,
             }}
@@ -31,13 +32,14 @@ const HelpPage = () => {
             <Typography
                 variant="h4"
                 gutterBottom
+                sx={{ color: 'white' }}
             >
                 Help & Support
             </Typography>
             <Typography
-                // variant="body1"
-                color='textSecondary'
+                variant="body1"
                 paragraph
+                sx={{ color: 'white' }}
             >
                 Welcome to the help section! Below are answers to some frequently asked questions. If you need further assistance, please contact our support team.
             </Typography>
@@ -45,9 +47,19 @@ const HelpPage = () => {
             {faqItems.map((item, index) => (
                 <Accordion
                     key={index}
+                    sx={{
+                        backgroundColor: '#008493',
+                        color: 'white',
+                        '& .MuiAccordionSummary-root': {
+                            color: 'white',
+                        },
+                        '& .MuiAccordionDetails-root': {
+                            color: 'white',
+                        },
+                    }}
                 >
                     <AccordionSummary
-                        expandIcon={<ExpandMoreIcon color='primary'/>}
+                        expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                         aria-controls={`panel${index}-content`}
                         id={`panel${index}-header`}
                     >

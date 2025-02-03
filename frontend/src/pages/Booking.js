@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// import 'materialize-css/dist/css/materialize.min.css';
-// import M from 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
 import readSlots from '../components/Read';
 import updateBookingData from '../components/Write';
-import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Typography, Container } from '@mui/material';
 import './styles.css';
 
 
@@ -80,115 +79,101 @@ const Booking = () => {
     console.log("length:", slotsData.length);
     console.log("other emails: ", otherEmailsList);
 
+    useEffect(() => {
+        // Initialize Materialize components if needed
+        M.AutoInit();
+    }, []);
+
     return (
-        <Container style={{ marginTop: '50px', marginBottom: '50px' }}>
-            <form onSubmit={handleSubmit}>
-                <Typography variant="h4" align="center" gutterBottom>
-                Lab Booking
-                </Typography>
-
-                {error && (
-                <Typography color="error" align="center">
-                    {error}
-                </Typography>
-                )}
-
+        <div style={{ color: 'white' }}>
+            <form onSubmit={handleSubmit} className="container" style={{ marginTop: '50px' }}>
+                <h2 className="center-align">Lab Booking</h2>
+                {error && <p className="red-text">{error}</p>}
+                
+                <div className="row">
+                    <div className="input-field col s6">
+                        <input
+                            id="primaryEmail"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="primaryEmail">Primary email</label>
+                    </div>
+                    <div className="input-field col s6">
+                        <input
+                            id="otherEmails"
+                            type="text"
+                            value={otherEmail}
+                            onChange={handleOtherEmailChange}
+                        />
+                        <label htmlFor="otherEmails">Enter other emails, separated by commas</label>
+                    </div>
+                </div>
+                
+                <p className="center-align">Select one time slot</p>
+                <p className="center-align grey-text">Database view of all available times</p> 
                 <div>
-                    <TextField
-                        id="primaryEmail"
-                        label="Primary email"
-                        type="email"
-                        variant='filled'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        fullWidth
-                        required
-                        margin="normal"
-                    />
-
-                    <TextField
-                        id="otherEmails"
-                        label="Enter other emails, separated by commas"
-                        variant='filled'
-                        value={otherEmail}
-                        onChange={handleOtherEmailChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                </div>
-
-                <Typography variant="h6" align="center" gutterBottom>
-                Select one time slot
-                </Typography>
-                <Typography variant="body2" align="center" color="textSecondary" paragraph>
-                Database view of all available times
-                </Typography>
-
-                {slotsData.length > 0 ? (
-                <Table>
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>Slot</TableCell>
-                        <TableCell>Start Time</TableCell>
-                        <TableCell>End Time</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Book</TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {slotsData.map((slot) => (
-                        <TableRow key={slot.id}>
-                        <TableCell>{slot?.id}</TableCell>
-                        <TableCell>
-                            {slot?.startTime?.toDate().toLocaleString() || 'Not Assigned Yet'}
-                        </TableCell>
-                        <TableCell>
-                            {slot?.endTime?.toDate().toLocaleString() || 'Not Assigned Yet'}
-                        </TableCell>
-                        <TableCell>{String(slot?.status)}</TableCell>
-                        <TableCell>
-                            {!slot.status && (
-                            <Button
-                                variant="contained"
-                                color={selectedSlot?.id === slot?.id ? 'secondary' : 'primary'}
+                    {slotsData.length > 0 ? (
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>Slot</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Status</th>
+                            <th>Book </th>
+                            {/* Add more columns here based on your data structure */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {slotsData.map((slot) => {
+                            return(
+                            <tr key={slot.id}>
+                                <td>{slot?.id}</td>
+                                <td>{slot?.startTime?.toDate().toLocaleString() || "Not Assigned Yet"}</td>
+                                <td>{slot?.endTime?.toDate().toLocaleString() || "Not Assigned Yet"}</td>
+                                <td>{String(slot?.status)}</td>
+                                <td>
+                                {!slot.status && (
+                                <button
+                                type="button"
                                 onClick={() => handleSelect(slot)}
-                            >
+                                className={`${selectedSlot?.id === slot?.id ? 'green' : 'blue'}`}
+                                >
                                 Select
-                            </Button>
-                            )}
-                        </TableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-                ) : (
-                <Typography align="center">No data available in the 'slots' collection.</Typography>
-                )}
-
-                {selectedSlot && (
-                <div style={{ marginTop: '20px' }}>
-                    <Typography variant="h6">Selected Slot Details</Typography>
-                    <Typography><b>Primary Email:</b> {email}</Typography>
-                    <Typography><b>Other Email:</b> {otherEmail}</Typography>
-                    <Typography><b>Slot ID:</b> {selectedSlot.id}</Typography>
-                    <Typography><b>Start Time:</b> {selectedSlot.startTime?.toDate().toLocaleString() || 'Not Assigned Yet'}</Typography>
-                    <Typography><b>End Time:</b> {selectedSlot.endTime?.toDate().toLocaleString() || 'Not Assigned Yet'}</Typography>
+                                </button>
+                                )}
+                                </td>
+                                {/* Add more cells here for other properties */}
+                            </tr>
+                            )})}
+                        </tbody>
+                        </table>
+                    ) : (
+                        <p>No data available in the 'slots' collection.</p>
+                    )}
                 </div>
-                )}
-
-                <div style={{ marginTop: '20px' }}>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isLoading || !selectedSlot}
-                    fullWidth
-                >
-                    {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Confirm Booking'}
-                </Button>
+                {/* Display selected slot and email details */}
+                <div className="section">
+                    <h5>Selected Slot Details</h5>
+                    {selectedSlot && (
+                    <div>
+                        <p><b>Primary Email:</b>{email}</p>
+                        <p><b>Other Email:</b> {otherEmail}</p>
+                        <p><b>Slot ID:</b> {selectedSlot.id}</p>
+                        <p><b>Start Time:</b> {selectedSlot.startTime?.toDate().toLocaleString() || "Not Assigned Yet"}</p>
+                        <p><b>End Time:</b> {selectedSlot.endTime?.toDate().toLocaleString() || "Not Assigned Yet"}</p>
+                    </div>
+                    )}
                 </div>
+                <br></br>
+                <button type="submit" className="btn waves-effect waves-light" disabled={isLoading || !selectedSlot}>
+                    {isLoading ? "Booking ..." : "Confirm Booking"}
+                </button>
             </form>
-        </Container>
+        </div>
     );
 }
 

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
-// import 'materialize-css/dist/css/materialize.min.css';
-import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
+import 'materialize-css/dist/css/materialize.min.css';
 import './styles.css';
 
 const SignUp = () => {
@@ -41,73 +40,45 @@ const SignUp = () => {
     };
 
     return (
-        <Container style={{ marginTop: '50px' }}>
-        <form onSubmit={handleSignup}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Sign Up
-          </Typography>
-  
-          {error && (
-            <Typography color="error" align="center" paragraph>
-              {error}
-            </Typography>
-          )}
-  
-          <div style={{ marginBottom: '16px' }}>
-            <TextField
-              id="email"
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-              margin="normal"
-            />
-          </div>
-  
-          <div style={{ marginBottom: '16px' }}>
-            <TextField
-              id="password"
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-              margin="normal"
-            />
-          </div>
-  
-          <div style={{ marginBottom: '16px' }}>
-            <TextField
-              id="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-              margin="normal"
-            />
-          </div>
-  
-          <div style={{ marginTop: '20px' }}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={isLoading || password !== confirmPassword}
-            >
-              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
-            </Button>
-          </div>
-        </form>
-      </Container>
+        <div className="container" style={{ marginTop: '50px' }}>
+            <form onSubmit={handleSignup}>
+                <h2 className="center-align">Sign Up</h2>
+                {error && <p className="red-text center-align">{error}</p>}
+                <div className="input-field">
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="email">Email:</label>
+                </div>
+                <div className="input-field">
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="password">Password:</label>
+                </div>
+                <div className="input-field">
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                </div>
+                <button type="submit" className="btn waves-effect waves-light" disabled={isLoading}>
+                    {isLoading ? "Signing Up..." : "Sign Up"}
+                </button>
+            </form>
+        </div>
     );
 };
 

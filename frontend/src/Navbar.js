@@ -1,11 +1,14 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
 import { useUser } from './components/UserContext';
 import { signOut } from 'firebase/auth';
@@ -41,7 +44,7 @@ export const NavBar = () => {
     };
   
     return (
-      <AppBar position="sticky" sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
+      <AppBar position="sticky" sx={{ bgcolor: '#008493', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Diversity2Icon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

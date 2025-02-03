@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-// import 'materialize-css/dist/css/materialize.min.css';
-// import M from 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
 import writeSlots from '../components/Write_slots';
 import './styles.css';
 
@@ -12,9 +12,9 @@ const SlotCreation = () => {
   });
 
   // Initialize Materialize components when the component mounts
-  // React.useEffect(() => {
-  //   M.AutoInit();
-  // }, []);
+  React.useEffect(() => {
+    M.AutoInit();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

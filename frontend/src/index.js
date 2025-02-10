@@ -17,12 +17,56 @@ import UserProvider from './components/UserContext.js'
 import Trial from './pages/Trial.js';
 import MySlots from './MySlots.js';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CssBaseline from "@mui/material/CssBaseline";
 import SlotsCalendar from './SlotsCalendar.js';
 
 
 
 const theme = createTheme({
+  components: {
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "black !important",
+        }
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          color: "black !important",
+          '&:hover fieldset': {
+                borderColor: 'yellow', // - Set the Input border when parent has :hover
+            },
+        },
+        focused: {
+          borderColor: "white",
+        },
+        notchedOutline: {
+          borderColor: "white",
+        },
+        input: {
+          color: "black !important"
+        }
+      }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#23486A",
+          },
+          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+            {
+              borderColor: "#23486A",
+            },
+        },
+      },
+    },
+  },
   palette: {
     mode: 'light',
     primary: {
@@ -45,6 +89,7 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <BrowserRouter>
@@ -66,11 +111,10 @@ root.render(
             <Route path="/calendar" element={<SlotsCalendar />} />
           </Route>
         </Route>
-        {/* <Route path="/3D" element={<ThreeD />} />
-        <Route path="/2D" element={<TwoD />} /> */}
       </Routes>
     </BrowserRouter>
     </ThemeProvider>
+    </LocalizationProvider>
   </UserProvider>
 );
 

@@ -3,7 +3,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom'; 
 // import 'materialize-css/dist/css/materialize.min.css';
-import './styles.css';
 import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
 import { useUser } from '../components/UserContext';
 
@@ -33,7 +32,7 @@ const Login = () => {
     };
 
     return (
-    <Container style={{ marginTop: '50px' }}>
+    <Container sx={{ marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
       <form onSubmit={handleLogin}>
         <Typography variant="h4" align="center" gutterBottom>
           Login

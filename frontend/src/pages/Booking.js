@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import readSlots from '../components/Read';
 import updateBookingData from '../components/Write';
 import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Typography, Container } from '@mui/material';
-import './styles.css';
 
 
 const Booking = () => {
@@ -81,9 +80,9 @@ const Booking = () => {
     console.log("other emails: ", otherEmailsList);
 
     return (
-        <Container style={{ marginTop: '50px', marginBottom: '50px' }}>
+        <Container sx={{ marginTop: '50px', marginBottom: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
             <form onSubmit={handleSubmit}>
-                <Typography variant="h4" align="center" gutterBottom>
+                <Typography variant="h4" fontWeight="bold" align="center" gutterBottom>
                 Lab Booking
                 </Typography>
 
@@ -98,7 +97,6 @@ const Booking = () => {
                         id="primaryEmail"
                         label="Primary email"
                         type="email"
-                        variant='filled'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         fullWidth
@@ -109,7 +107,6 @@ const Booking = () => {
                     <TextField
                         id="otherEmails"
                         label="Enter other emails, separated by commas"
-                        variant='filled'
                         value={otherEmail}
                         onChange={handleOtherEmailChange}
                         fullWidth
@@ -120,7 +117,7 @@ const Booking = () => {
                 <Typography variant="h6" align="center" gutterBottom>
                 Select one time slot
                 </Typography>
-                <Typography variant="body2" align="center" color="textSecondary" paragraph>
+                <Typography variant="body2" align="center">
                 Database view of all available times
                 </Typography>
 

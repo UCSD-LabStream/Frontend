@@ -1,5 +1,6 @@
 import { labSlots } from "../Firebase/firebase";
 import { doc, collection, addDoc, Timestamp } from "firebase/firestore";
+import dayjs, { Dayjs } from 'dayjs';
 
 
 const writeSlots = async (startTimeInput, endTimeInput) => {
@@ -9,8 +10,8 @@ const writeSlots = async (startTimeInput, endTimeInput) => {
         //const slotRef = doc(labSlots, 'slots');
         const labSlotsCollection = collection(labSlots, "slots");
         const slotData = {
-            startTime: Timestamp.fromDate(new Date(startTimeInput)),
-            endTime: Timestamp.fromDate(new Date(endTimeInput)),
+            startTime: Timestamp.fromDate(startTimeInput.toDate()),
+            endTime: Timestamp.fromDate(endTimeInput.toDate()),
             bookedBy: "",
             otherEmails: "",
             status: false

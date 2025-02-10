@@ -4,7 +4,6 @@ import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 // import 'materialize-css/dist/css/materialize.min.css';
 import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
-import './styles.css';
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
@@ -41,7 +40,7 @@ const SignUp = () => {
     };
 
     return (
-        <Container style={{ marginTop: '50px' }}>
+        <Container style={{ marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
         <form onSubmit={handleSignup}>
           <Typography variant="h4" align="center" gutterBottom>
             Sign Up

@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
-// import 'materialize-css/dist/css/materialize.min.css';
-// import M from 'materialize-css';
+import { Box, Button, TextField, Typography, Container } from "@mui/material";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs, { Dayjs } from 'dayjs';
 import writeSlots from '../components/Write_slots';
-import './styles.css';
 
 const SlotCreation = () => {
   const [formData, setFormData] = useState({
     course_no: '',
-    startTime: '',
-    endTime: '',
+    startTime: dayjs('2025-01-01'),
+    endTime: dayjs('2025-01-01'),
   });
-
-  // Initialize Materialize components when the component mounts
-  // React.useEffect(() => {
-  //   M.AutoInit();
-  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,54 +29,64 @@ const SlotCreation = () => {
   };
 
   return (
-    <div className="container">
-      <h4>Create Slot</h4>
-      <form onSubmit={handleSubmit} id="slot-form">
-        <div className="input-field">
-          <input
-            id="course_no"
-            name="course_no"
-            type="text"
-            value={formData.course_no}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="course_no">Course Number</label>
-        </div>
+    <Container maxWidth="sm" sx={{ marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }} >
+      <Box sx={{ padding: 2 }}>
+          <Typography variant="h4" gutterBottom>
+              Create Slot
+          </Typography>
+          <form onSubmit={handleSubmit} id="slot-form">
+              <TextField
+                  id="course_no"
+                  label="Course Number"
+                  name="course_no"
+                  type="text"
+                  value={formData.course_no}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  sx={{
+                    marginBottom: 2
+                  }}
+              />
 
-        <div className="input-field">
-          <input
-            id="start_time"
-            name="startTime"
-            type="datetime-local"
-            value={formData.startTime}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="start_time" className="active">
-            Start Time
-          </label>
-        </div>
+              <div style={{ display: 'flex', gap: '10px'}}>
+              <DateTimePicker
+                  label="Start Time"
+                  name="startTime"
+                  value={formData.startTime}
+                  onChange={(newDate) => setFormData({...formData, startTime: newDate})}
+                  required
+                  fullWidth
+                  sx={{ 
+                    marginBottom: 2,  
+                  }}
+              />
 
-        <div className="input-field">
-          <input
-            id="end_time"
-            name="endTime"
-            type="datetime-local"
-            value={formData.endTime}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="end_time" className="active">
-            End Time
-          </label>
-        </div>
+              <DateTimePicker
+                  label="End Time"
+                  name="endTime"
+                  value={formData.endTime}
+                  onChange={(newDate) => setFormData({...formData, endTime: newDate})}
+                  required
+                  fullWidth
+                  sx={{ marginBottom: 2 }}
+              />
+              </div>
 
-        <button className="btn waves-effect waves-light" type="submit">
-          Create Slot
-        </button>
-      </form>
-    </div>
+              
+
+              <Button
+                  className="btn waves-effect waves-light"
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+              >
+                  Create Slot
+              </Button>
+          </form>
+      </Box>
+  </Container>
   );
 };
 

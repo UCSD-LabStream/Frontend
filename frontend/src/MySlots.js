@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Typography, TextField, Box, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import * as XLSX from "xlsx"; 
 
 function MySlots() {
@@ -48,51 +49,64 @@ function MySlots() {
     };
 
     return (
-        <div>
-            <h3 style={{ color: "white"}} >Upload and view Excel sheets</h3>
+        <Box sx={{ padding: 2 }}>
+            <Typography variant="h6" color="white">
+                Upload and view Excel sheets
+            </Typography>
 
             <form onSubmit={handleFormSubmit}>
-                <input type="file" required onChange={handleFile} />
-                <button type="submit">UPLOAD</button>
+                <TextField
+                    type="file"
+                    required
+                    onChange={handleFile}
+                    fullWidth
+                    sx={{ marginBottom: 2 }}
+                />
+                <Button variant="contained" type="submit" fullWidth>
+                    UPLOAD
+                </Button>
                 {typeError && (
-                    <div role="alert" style={{ color: "red", marginTop: "10px" }}>
+                    <Alert severity="error" sx={{ marginTop: 2 }}>
                         {typeError}
-                    </div>
+                    </Alert>
                 )}
             </form>
 
-            <div>
+            <Box sx={{ marginTop: 4 }}>
                 {excelData ? (
-                    <div>
-                        <table>
-                            <thead>
-                                <tr style={{ color: "white"}} >
+                    <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table aria-label="Excel Data Table">
+                            <TableHead>
+                                <TableRow>
                                     {Object.keys(excelData[0]).map((key) => (
-                                        <th key={key}>{key}</th>
+                                        <TableCell key={key} sx={{ color: "white" }}>
+                                            {key}
+                                        </TableCell>
                                     ))}
-                                </tr>
-                            </thead>
-
-                            <tbody>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {excelData.map((individualExcelData, index) => (
-                                    <tr key={index} style={{ color: "white"}}>
+                                    <TableRow key={index}>
                                         {Object.keys(individualExcelData).map((key) => (
-                                            <td key={key}>
-                                                {key === "YourDateColumn" 
-                                                    ? individualExcelData[key].toLocaleString()  // Format date
+                                            <TableCell key={key} sx={{ color: "white" }}>
+                                                {key === "YourDateColumn"
+                                                    ? new Date(individualExcelData[key]).toLocaleString()
                                                     : individualExcelData[key]}
-                                            </td>
+                                            </TableCell>
                                         ))}
-                                    </tr>
+                                    </TableRow>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 ) : (
-                    <div>No file uploaded yet!</div>
+                    <Typography variant="body1" color="white">
+                        No file uploaded yet!
+                    </Typography>
                 )}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
 

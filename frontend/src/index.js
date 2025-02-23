@@ -106,9 +106,9 @@ root.render(
           
           {/* Nested Protected Route for Professors */}
           <Route element={<ProfessorRoute />}>
-            <Route path="/Slots" element={<SlotCreation />} />
+            {/*<Route path="/Slots" element={<SlotCreation />} /> */}
             <Route path="/MySlots" element={<MySlots />} />
-            <Route path="/calendar" element={<SlotsCalendar />} />
+            <Route path="/Slots" element={<SlotsCalendar />} />
           </Route>
         </Route>
       </Routes>

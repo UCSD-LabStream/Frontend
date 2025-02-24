@@ -37,6 +37,13 @@ const SlotsCalendar = () => {
     endTime.setMinutes(startTime.getMinutes() + 30);
     const timeTuple = [startTime, endTime];
 
+    const isBooked = bookedSlots.some(
+      (slot) =>
+        new Date(slot.startTime.toDate()).toLocaleString() === startTime.toLocaleString()
+    );
+  
+    if (isBooked) return;
+
     setSelectedTimes((prev) => {
       // Check if the timeTuple is already selected
       const existingIndex = prev.findIndex(

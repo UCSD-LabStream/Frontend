@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ClickableFourierOptics from './models/ClickableFourierOptics';
+import RaycastWrapper from './models/raycast/RaycastWrapper';
 
 function ThreeD() {
     const [selectedModel, selectModelType] = useState("None")
@@ -24,7 +25,8 @@ function ThreeD() {
         // 'LabeledMulti2': <MultiModel2 />,
         // 'FourierOpticsTest': <FourierOpticsTest />,
         // 'FourierOptics': <FourierOptics />,
-        'ClickableFourierOptics': <ClickableFourierOptics />
+        'ClickableFourierOptics': <ClickableFourierOptics />,
+        'RayCasting': <RaycastWrapper />
     }
 
     return (

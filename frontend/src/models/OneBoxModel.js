@@ -39,7 +39,6 @@ const OneBoxModel = () => {
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={3} />
             <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
 
-            {/* Render two boxes */}
             <Box position={[0, 0, 0]} />
 
             <OrbitControls enablePan={true} enableZoom={true} />

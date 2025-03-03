@@ -39,8 +39,8 @@ const RaycastModel = () => {
     return (
         
         <ModelRender 
-            objUrl="/objs/Assembly1.obj"
-            mtlUrl="/objs/Assembly1.mtl"
+            objUrl="/objs/coarse.obj"
+            mtlUrl="/objs/coarse.mtl"
             scale={[10, 10, 10]}
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}

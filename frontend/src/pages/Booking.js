@@ -133,9 +133,9 @@ const Booking = () => {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {slotsData.map((slot) => (
-                        <TableRow key={slot.id}>
-                        <TableCell>{slot?.id}</TableCell>
+                    {slotsData.map((slot, index) => (
+                        <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
                         <TableCell>
                             {slot?.startTime?.toDate().toLocaleString() || 'Not Assigned Yet'}
                         </TableCell>
@@ -167,7 +167,6 @@ const Booking = () => {
                     <Typography variant="h6">Selected Slot Details</Typography>
                     <Typography><b>Primary Email:</b> {email}</Typography>
                     <Typography><b>Other Email:</b> {otherEmail}</Typography>
-                    <Typography><b>Slot ID:</b> {selectedSlot.id}</Typography>
                     <Typography><b>Start Time:</b> {selectedSlot.startTime?.toDate().toLocaleString() || 'Not Assigned Yet'}</Typography>
                     <Typography><b>End Time:</b> {selectedSlot.endTime?.toDate().toLocaleString() || 'Not Assigned Yet'}</Typography>
                 </div>

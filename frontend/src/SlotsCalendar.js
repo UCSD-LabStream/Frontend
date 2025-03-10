@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import writeSlots from './components/Write_slots';
 import readSlots from './components/Read';
 import { getAuth } from "firebase/auth"; 
+import DeleteSlots from "./components/DeleteSlots";
 
 // Utility function to get the date for a specific day of the current week
 const getDateOfWeek = (dayOffset) => {
@@ -18,22 +19,75 @@ const SlotsCalendar = () => {
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [createdSlots, setCreatedSlots] = useState([]);
   const [myCreatedSlots, setMyCreatedSlots] = useState([]);
+  const [deletableSlots, setDeletableSlots] = useState([]);
   const auth = getAuth();
   const user = auth.currentUser;
 
   const fetchCreatedSlots = async () => {
     const slots = await readSlots();
+    const updatedDeletableSlots = [];
+    const updatedMyCreatedSlots = []; // Store the slots created by the current user
+  
     slots.forEach(slot => {
-      if (slot.createdBy === user.email){
-        myCreatedSlots.push(slot);
+      if (slot.createdBy === user.email) {
+        updatedMyCreatedSlots.push(slot);
+        const currTime = new Date();
+        const slotStartTime = slot.startTime.toDate ? slot.startTime.toDate() : new Date(slot.startTime);
+        const bufferTime = new Date(slotStartTime);
+        bufferTime.setMinutes(bufferTime.getMinutes() - 30);
+        if (currTime <= bufferTime) {
+          updatedDeletableSlots.push(slot);
+        }
       }
-    })
+    });
+  
+    // Update the state correctly
+    setMyCreatedSlots(updatedMyCreatedSlots);
+    setDeletableSlots(updatedDeletableSlots);
     setCreatedSlots(slots);
   };
 
   useEffect(() => {
     fetchCreatedSlots();
-  }, []);
+  
+    const updateDeletableSlots = () => {
+      const currTime = new Date();
+      
+      setDeletableSlots((prevDeletableSlots) => {
+        return prevDeletableSlots.filter(slot => {
+          // Convert slot.startTime to a Date as it is a Firebase Timestamp
+          const slotStartTime = slot.startTime.toDate ? slot.startTime.toDate() : new Date(slot.startTime);
+          const bufferTime = new Date(slotStartTime);
+          bufferTime.setMinutes(bufferTime.getMinutes() - 30);
+          return currTime <= bufferTime;
+        });
+      });
+    };    
+  
+    // Calculate the time left until the next full minute
+    const now = new Date();
+    const secondsLeft = 60 - now.getSeconds();
+    const millisecondsLeft = secondsLeft * 1000;
+  
+    // Set timeout to update deletable slots at the next full minute
+    const timeoutId = setTimeout(() => {
+      updateDeletableSlots(); // Update at the start of the next minute
+  
+      // Then set up an interval to update every minute
+      const intervalId = setInterval(updateDeletableSlots, 60000); // Every minute
+  
+      // Cleanup the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    }, millisecondsLeft);
+  
+    // Cleanup the timeout on unmount
+    return () => clearTimeout(timeoutId);
+  }, []); // This effect only runs once when the component mounts
+  
+  useEffect(() => {
+    console.log("updated delete slots:", deletableSlots);
+  }, [deletableSlots]);
+  
 
   const handleOnClick = (date, day, hour) => {
     const startTime = new Date(`${date} ${hour}`);
@@ -81,6 +135,18 @@ const SlotsCalendar = () => {
       window.location.reload();
     }, 3000);
   };
+
+  const handleDeleteSlot = (slot) => {
+    const startTime = slot.startTime.toDate().toLocaleString();
+    const endTime = slot.endTime.toDate().toLocaleString();
+  
+    alert(`Deleting a slot! ${startTime} to ${endTime}`);
+    DeleteSlots(slot.id);
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+
+  }
 
   return (
     <div className="w-full p-4 overflow-x-auto">
@@ -162,6 +228,26 @@ const SlotsCalendar = () => {
           </div>
         )}
       </div>
+
+      <div className="mt-4">
+  <h2 className="text-lg font-semibold text-center">Deletable Slots</h2>
+  <ul className="list-disc list-inside">
+    {deletableSlots.map((slot) => (
+      <li key={slot.id} className="flex justify-between items-center">
+        <span>
+          {slot.startTime.toDate().toLocaleString()} - {slot.endTime.toDate().toLocaleString()}
+        </span>
+        <button
+          onClick={() => handleDeleteSlot(slot)} // Make sure to implement this function
+          className="ml-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+        >
+          Delete
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
 
       {/* Submit Button */}
       <div className="text-center mt-6">

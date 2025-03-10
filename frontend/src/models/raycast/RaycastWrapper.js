@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import RaycastModel from './RaycastModel';
 import * as THREE from 'three';
 import StandardLabel from '../labels/StandardLabel';
+import texts from '../labels/labels';
 
 function RaycastHandler({ onFaceClick }) {
   const { scene, camera } = useThree();
@@ -39,6 +40,22 @@ function RaycastHandler({ onFaceClick }) {
   
 }
 
+// Helper function to map a point to a component (or no component) and return the relevant label
+function setLabelFromCoordinates([x, y, z]){
+  if (y < 0 || y > 2 || z < -0.6 || z > 0.6) {
+    console.log("y or z OOB");
+    return "";
+  }
+
+  for (const part of texts) {
+      if (x >= part.minX && x <= part.maxX) {
+          return part.name;
+      }
+  }
+
+  return "";
+}
+
 function Box({ minX, maxX, minY, maxY, minZ, maxZ }) {
     // Calculate box size
     const width = maxX - minX;
@@ -65,7 +82,8 @@ function RaycastWrapper({ children }) {
     console.log(`Clicked face index: ${faceIndex}`);
     console.log('Intersection point:', point);
     // Display label 
-    setLabelPosition([point.x, point.y, point.z]);
+    const label = setLabelFromCoordinates([point.x, point.y, point.z]);
+    console.log(label);
   };
 
   return (
@@ -92,13 +110,14 @@ function RaycastWrapper({ children }) {
         maxZ={0.6}
 
     /> */}
-    <Html position={labelPosition} center>
+    {/* <Html position={labelPosition} center>
       <StandardLabel 
           title={"test title"}
           description={"label test"}
           showLabel={setLabel}
       />
-    </Html>
+    </Html> */}
+    {/* Render children components that the wrapper encapsulates (the actual model) */}
     {children}
       <OrbitControls enableZoom enablePan enableRotate />
       <RaycastHandler onFaceClick={handleFaceClick} />

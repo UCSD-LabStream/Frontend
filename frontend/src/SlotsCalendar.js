@@ -34,7 +34,7 @@ const SlotsCalendar = () => {
         const currTime = new Date();
         const slotStartTime = slot.startTime.toDate ? slot.startTime.toDate() : new Date(slot.startTime);
         const bufferTime = new Date(slotStartTime);
-        bufferTime.setMinutes(bufferTime.getMinutes() - 30);
+        bufferTime.setMinutes(bufferTime.getMinutes() - 1);
         if (currTime <= bufferTime) {
           updatedDeletableSlots.push(slot);
         }
@@ -58,7 +58,7 @@ const SlotsCalendar = () => {
           // Convert slot.startTime to a Date as it is a Firebase Timestamp
           const slotStartTime = slot.startTime.toDate ? slot.startTime.toDate() : new Date(slot.startTime);
           const bufferTime = new Date(slotStartTime);
-          bufferTime.setMinutes(bufferTime.getMinutes() - 30);
+          bufferTime.setMinutes(bufferTime.getMinutes() - 1);
           return currTime <= bufferTime;
         });
       });
@@ -106,9 +106,9 @@ const SlotsCalendar = () => {
     ); 
 
     if (isBooked && !isMyBooked) return;
-    if (isMyBooked) {
-      
-    }
+    /*if (isMyBooked) {
+      console.log("Deletable");
+    }*/
 
     setSelectedTimes((prev) => {
       const existingIndex = prev.findIndex(
@@ -169,8 +169,8 @@ const SlotsCalendar = () => {
         {/* Time Column */}
         <div className="border-r border-gray-300">
           {hoursOfDay.map((hour) => (
-            <div key={hour} className="h-10 border-b border-gray-300 bg-white flex items-center justify-center">
-              {hour}
+            <div className="h-10 border-b border-gray-300 bg-white flex items-start justify-center pt-1">
+              <span className="self-start leading-none">{hour}</span>
             </div>
           ))}
         </div>
@@ -181,34 +181,49 @@ const SlotsCalendar = () => {
           return (
             <div key={day} className="border-r border-gray-300">
               {hoursOfDay.map((hour) => {
-                const timeString = `${date} ${hour}`;
-                const isBooked = createdSlots.some(
-                  (slot) =>
-                    new Date(slot.startTime.toDate()).toLocaleString() === new Date(timeString).toLocaleString()
-                );
-                const isMyBooked = myCreatedSlots.some(
-                  (slot) =>
-                    new Date(slot.startTime.toDate()).toLocaleString() === new Date(timeString).toLocaleString()
-                )
-                return (
-                  <div
-                    key={timeString}
-                    className={`h-10 border-b border-gray-300 flex items-center justify-center cursor-pointer transition ${
-                      isMyBooked
-                        ? "bg-purple-500"
-                        : isBooked && !isMyBooked
-                        ? "bg-red-500"
-                        : selectedTimes.some(
-                            ([start, end]) =>
-                              start.toLocaleString() === new Date(timeString).toLocaleString()
-                          )
-                        ? "bg-green-500"
-                        : "bg-white hover:bg-green-300"
-                    }`}                    
-                    onClick={() => handleOnClick(date, day, hour)}
-                  />
-                );
-              })}
+              const timeString = `${date} ${hour}`;
+              const bookedSlot = myCreatedSlots.find(
+                (slot) =>
+                  new Date(slot.startTime.toDate()).toLocaleString() === new Date(timeString).toLocaleString()
+              );
+              const isBooked = createdSlots.some(
+                (slot) =>
+                  new Date(slot.startTime.toDate()).toLocaleString() === new Date(timeString).toLocaleString()
+              );
+              const isMyBooked = !!bookedSlot;
+              const isSlotDeletable = deletableSlots.some(
+                (deletableSlot) => deletableSlot && deletableSlot.id === bookedSlot?.id // Check if deletableSlot exists and compare by id
+              );              
+
+              return (
+                <div
+                  key={timeString}
+                  className={`relative h-10 border-b border-gray-300 flex items-center justify-center cursor-pointer transition ${
+                    isMyBooked
+                      ? "bg-purple-500"
+                      : isBooked && !isMyBooked
+                      ? "bg-red-500"
+                      : selectedTimes.some(
+                          ([start, end]) =>
+                            start.toLocaleString() === new Date(timeString).toLocaleString()
+                        )
+                      ? "bg-green-500"
+                      : "bg-white hover:bg-green-300"
+                  }`}
+                  onClick={() => handleOnClick(date, day, hour)}
+                >
+                  {isMyBooked && isSlotDeletable && (
+                    <button
+                      onClick={() => handleDeleteSlot(bookedSlot)}
+                      className="absolute top-0 right-0 bg-red-600 text-white text-xs px-2 py-1 rounded-lg hover:bg-red-800 transition"
+                    >
+                      X
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+
             </div>
           );
         })}

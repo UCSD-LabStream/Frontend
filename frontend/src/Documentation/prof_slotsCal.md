@@ -1,4 +1,4 @@
-# Slots Calendar
+# Professor Slots Calendar
 
 Author: Ridhi Srikanth
 

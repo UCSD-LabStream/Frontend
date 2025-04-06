@@ -1,4 +1,4 @@
-# Booking Component - Developer Documentation
+# Student Lab Booking
 
 Author: Ridhi Srikanth
 
@@ -53,6 +53,5 @@ npm install @mui/material @emotion/react @emotion/styled
 - Optionally filter or sort slots
 
 ---
-Maintained by: Dev Team  
-Last Updated: April 2025
+
 

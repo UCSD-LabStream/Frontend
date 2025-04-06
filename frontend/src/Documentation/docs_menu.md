@@ -1,8 +1,8 @@
-## All Code Documentation
+# All Code Documentation
 
 Authors: Ridhi Srikanth
 
-# Database Functionality
+## Database Functionality
 
 This react application is stores and manages all user data using firebase. The following database functionalities have been implemented in the code: 
 
@@ -10,10 +10,10 @@ This react application is stores and manages all user data using firebase. The f
 - Write
 - Delete
 
-# Student View
+## Student View
 
 Students have access to different pages which have limited permissions when interacting with the database. 
 
-# Professor View 
+## Professor View 
 
 Professors have access to other pages which have also have minited permission when interacting with the database. However, the professors can make more changes to the data.  

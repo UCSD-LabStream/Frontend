@@ -105,7 +105,7 @@ const SlotsCalendar = () => {
         new Date(slot.startTime.toDate()).toLocaleString() === startTime.toLocaleString()
     ); 
 
-    if (isBooked && !isMyBooked) return;
+    if (isBooked || isMyBooked) return;
     /*if (isMyBooked) {
       console.log("Deletable");
     }*/
@@ -243,25 +243,6 @@ const SlotsCalendar = () => {
           </div>
         )}
       </div>
-
-      <div className="mt-4">
-  <h2 className="text-lg font-semibold text-center">Deletable Slots</h2>
-  <ul className="list-disc list-inside">
-    {deletableSlots.map((slot) => (
-      <li key={slot.id} className="flex justify-between items-center">
-        <span>
-          {slot.startTime.toDate().toLocaleString()} - {slot.endTime.toDate().toLocaleString()}
-        </span>
-        <button
-          onClick={() => handleDeleteSlot(slot)} // Make sure to implement this function
-          className="ml-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
-        >
-          Delete
-        </button>
-      </li>
-    ))}
-  </ul>
-</div>
 
 
       {/* Submit Button */}

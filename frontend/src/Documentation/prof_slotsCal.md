@@ -22,7 +22,7 @@ This is a React-based calendar component that allows authenticated users to book
 - View all created slots (color-coded)
 - Delete future slots that the current user has created
 - Auto-refresh deletable slots every minute
-- Prevent booking on already reserved slots unless the current user created them
+- Prevent booking on already reserved slots
 
 ---
 

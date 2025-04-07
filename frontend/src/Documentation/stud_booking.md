@@ -37,19 +37,12 @@ Component for booking lab time slots using React and Material UI.
 
 ## Behavior
 - Only one slot can be selected
-- `Select` button is only enabled for available slots
+- Select button is only enabled for available slots
 - Error messages for no slot selected or failed booking
 
 ## Dependencies
 ```bash
 npm install @mui/material @emotion/react @emotion/styled
 ```
-
-## Suggestions
-- Add email format validation
-- Provide success feedback
-- Optionally filter or sort slots
-
----
 
 

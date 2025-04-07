@@ -17,7 +17,7 @@ function RaycastHandler({ onFaceClick }) {
       setIsModelLoaded(hasModel);
     };
 
-    checkModelLoaded(); 
+    checkModelLoaded();
 
     const observer = new MutationObserver(checkModelLoaded);
     observer.observe(gl.domElement, { childList: true, subtree: true });
@@ -27,12 +27,12 @@ function RaycastHandler({ onFaceClick }) {
 
   useEffect(() => {
     if (!isModelLoaded) return;
-
-    const rect = gl.domElement.getBoundingClientRect();
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
     const handlePointerDown = (event) => {
+      // Fetch the bounds at runtime of handlePointerDown so we get the current size 
+      const rect = gl.domElement.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
@@ -56,50 +56,50 @@ function RaycastHandler({ onFaceClick }) {
 }
 
 // Helper function to map a point to a component (or no component) and return the relevant label
-function getLabelFromCoordinates([x, y, z]){
+function getLabelFromCoordinates([x, y, z]) {
   if (y < 0 || y > 2 || z < -0.6 || z > 0.6) {
     console.log("y or z OOB");
     return "";
   }
 
   for (const part of components) {
-      if (x >= part.minX && x <= part.maxX &&
-        y >= part.minY && y <= part.maxY &&
-        z >= part.minZ && z <= part.maxZ 
-      ) {
-          // we are in bounds of the part
-          return part.name;
-      }
+    if (x >= part.minX && x <= part.maxX &&
+      y >= part.minY && y <= part.maxY &&
+      z >= part.minZ && z <= part.maxZ
+    ) {
+      // we are in bounds of the part
+      return part.name;
+    }
   }
 
   return "";
 }
 
 function Box({ minX, maxX, minY, maxY, minZ, maxZ }) {
-    // Calculate box size
-    const width = maxX - minX;
-    const height = maxY - minY;
-    const depth = maxZ - minZ;
-  
-    // Calculate box center position
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-    const centerZ = (minZ + maxZ) / 2;
-  
-    return (
-      <mesh position={[centerX, centerY, centerZ]} castShadow receiveShadow>
-        <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color="blue" transparent opacity={0.3} wireframe={false} />
-      </mesh>
-    );
-  }  
+  // Calculate box size
+  const width = maxX - minX;
+  const height = maxY - minY;
+  const depth = maxZ - minZ;
+
+  // Calculate box center position
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  const centerZ = (minZ + maxZ) / 2;
+
+  return (
+    <mesh position={[centerX, centerY, centerZ]} castShadow receiveShadow>
+      <boxGeometry args={[width, height, depth]} />
+      <meshStandardMaterial color="blue" transparent opacity={0.3} wireframe={false} />
+    </mesh>
+  );
+}
 
 function RaycastWrapper({ setComponent, setDescription, children }) {
-  const [labelPosition, setLabelPosition] = useState([0,0,0]);
+  const [labelPosition, setLabelPosition] = useState([0, 0, 0]);
   const [labelActive, setLabelActive] = useState(false);
   const [labelTitle, setLabelTitle] = useState("");
   const [labelDesc, setLabelDesc] = useState("");
-  const [orbPosition, setOrbPosition] = useState([0,0,0]);
+  const [orbPosition, setOrbPosition] = useState([0, 0, 0]);
 
   const orbRef = useRef();
 
@@ -108,15 +108,12 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
     console.log('Intersection point:', point);
     // Display label 
     const label = getLabelFromCoordinates([point.x, point.y, point.z]);
-    if(label !== ""){
-      // setLabelActive(true); 
-      setLabelPosition([point.x, point.y, point.z]);
-      // setLabelTitle(label);
-      // setLabelDesc(components.find(component => component.name === label).desc);
+    if (label !== "") {
+      setLabelActive(true); 
       setComponent(label);
       const comp = components.find(component => component.name === label)
       setDescription(comp.desc)
-      setOrbPosition([(comp.maxX - comp.minX)/2 + comp.minX, comp.maxY + 0.1, (comp.maxZ - comp.minZ)/2 + comp.minZ])
+      setOrbPosition([(comp.maxX - comp.minX) / 2 + comp.minX, comp.maxY + 0.1, (comp.maxZ - comp.minZ) / 2 + comp.minZ])
     }
     console.log(label);
   };
@@ -126,51 +123,44 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
 
   return (
     <div style={{ display: 'flex', height: '300px', width: '100%' }}>
-        
-    <Canvas
-     camera={{ position: [5, 3, 5], fov: 30 }}
-     style={{ width: '100%', height: '100%' }}
-     resize={{ scroll: true, debounce: { scroll: 50, resize: 50 } }} // recalculate size on parent resize
-     frameloop="demand"
-   >
-   
-      {/* Ambient Light to brighten the entire scene */}
-      <ambientLight intensity={0.8} />
 
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={3} />
-    <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
+      <Canvas
+        camera={{ position: [5, 3, 5], fov: 30 }}
+        style={{ width: '100%', height: '100%' }}
+        resize={{ scroll: true, debounce: { scroll: 50, resize: 50 } }} // recalculate size on parent resize
+        frameloop="demand"
+      >
 
-    {/* <Box 
+        {/* Ambient Light to brighten the entire scene */}
+        <ambientLight intensity={0.8} />
+
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={3} />
+        <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
+
+        {/* 
+        Example of how to include the translucent box for fine-tuning compnoent bounds
+        <Box 
         minX={-6.1}
         maxX={-5.44}
         minY={0}
         maxY={2}
         minZ={-0.6}
         maxZ={0.6}
-
     /> */}
-    {/* Render the orb */}
-    <mesh position={orbPosition} ref={orbRef}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshStandardMaterial color="red" />
-    </mesh>
-    {labelActive && 
-    <Html position={labelPosition} center>
-      <StandardLabel 
-          title={labelTitle}
-          description={labelDesc}
-          showLabel={toggleLabel} // pass in toggle function so that label knows how to handle clicking the x
-      />
-    </Html>
-}
-    {/* Render children components that the wrapper encapsulates (the actual model) */}
-    {children}
-      <OrbitControls 
-        enableZoom 
-        enablePan 
-        enableRotate={!labelActive} />
-      <RaycastHandler onFaceClick={handleFaceClick} />
-    </Canvas>
+        {labelActive &&
+            <mesh position={orbPosition} ref={orbRef}>
+              <sphereGeometry args={[0.1, 16, 16]} />
+              <meshStandardMaterial color="red" />
+            </mesh>
+        }
+        {/* Render children components that the wrapper encapsulates (the actual model) */}
+        {children}
+        <OrbitControls
+          enableZoom
+          enablePan
+          enableRotate />
+        <RaycastHandler onFaceClick={handleFaceClick} />
+      </Canvas>
     </div>
   );
 }

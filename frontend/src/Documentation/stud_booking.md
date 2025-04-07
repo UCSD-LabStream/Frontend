@@ -34,7 +34,6 @@ Component for booking lab time slots using React and Material UI.
 - `TextField`: Email inputs
 - `Table`: Displays slots with select button
 - `Button`: Confirm booking with loading state
-- `Typography`: Headers, messages
 
 ## Behavior
 - Only one slot can be selected

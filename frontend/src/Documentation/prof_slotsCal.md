@@ -79,6 +79,6 @@ Fetches all slots from the database, filters them to identify:
 
 ## How Deletion Works
 
-- A slot can be deleted if its `startTime` is in the future.
+- A slot can be deleted if its `startTime` is at least 1 minute in the future.
 - This check is run every minute to keep `deletableSlots` up to date.
 

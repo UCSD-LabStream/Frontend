@@ -1,54 +1,73 @@
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import RaycastModel from './RaycastModel';
 import * as THREE from 'three';
 import StandardLabel from '../labels/StandardLabel';
-import texts from '../labels/labels';
+import components from '../labels/labels';
 
 function RaycastHandler({ onFaceClick }) {
-  const { scene, camera } = useThree();
-  const { gl } = useThree(); 
+  const { scene, camera, gl } = useThree();
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
+
   useEffect(() => {
-    
+    // Check if a model (non-light object) exists in the scene
+    const checkModelLoaded = () => {
+      const hasModel = scene.children.some((child) => !(child instanceof THREE.Light));
+      setIsModelLoaded(hasModel);
+    };
+
+    checkModelLoaded(); 
+
+    const observer = new MutationObserver(checkModelLoaded);
+    observer.observe(gl.domElement, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, [scene, gl]);
+
+  useEffect(() => {
+    if (!isModelLoaded) return;
+
     const rect = gl.domElement.getBoundingClientRect();
-  
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
     const handlePointerDown = (event) => {
-      const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();
-  
-      // Use the rect for correct mouse coordinates
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  
+
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObject(scene, true);
-  
+
       if (intersects.length > 0) {
         const intersect = intersects[0];
-        const faceIndex = intersect.faceIndex;
-        const point = intersect.point;
-        onFaceClick(faceIndex, point);
+        onFaceClick(intersect.faceIndex, intersect.point);
       }
     };
-  
-    window.addEventListener('pointerdown', handlePointerDown);
+
+    gl.domElement.addEventListener('pointerdown', handlePointerDown);
+
     return () => {
-      window.removeEventListener('pointerdown', handlePointerDown);
+      gl.domElement.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [scene, camera, onFaceClick]);
-  
+  }, [scene, camera, gl, onFaceClick, isModelLoaded]);
+
+  return null;
 }
 
 // Helper function to map a point to a component (or no component) and return the relevant label
-function setLabelFromCoordinates([x, y, z]){
+function getLabelFromCoordinates([x, y, z]){
   if (y < 0 || y > 2 || z < -0.6 || z > 0.6) {
     console.log("y or z OOB");
     return "";
   }
 
-  for (const part of texts) {
-      if (x >= part.minX && x <= part.maxX) {
+  for (const part of components) {
+      if (x >= part.minX && x <= part.maxX &&
+        y >= part.minY && y <= part.maxY &&
+        z >= part.minZ && z <= part.maxZ 
+      ) {
+          // we are in bounds of the part
           return part.name;
       }
   }
@@ -75,16 +94,35 @@ function Box({ minX, maxX, minY, maxY, minZ, maxZ }) {
     );
   }  
 
-function RaycastWrapper({ children }) {
+function RaycastWrapper({ setComponent, setDescription, children }) {
   const [labelPosition, setLabelPosition] = useState([0,0,0]);
-  var setLabel = false;
+  const [labelActive, setLabelActive] = useState(false);
+  const [labelTitle, setLabelTitle] = useState("");
+  const [labelDesc, setLabelDesc] = useState("");
+  const [orbPosition, setOrbPosition] = useState([0,0,0]);
+
+  const orbRef = useRef();
+
   const handleFaceClick = (faceIndex, point) => {
     console.log(`Clicked face index: ${faceIndex}`);
     console.log('Intersection point:', point);
     // Display label 
-    const label = setLabelFromCoordinates([point.x, point.y, point.z]);
+    const label = getLabelFromCoordinates([point.x, point.y, point.z]);
+    if(label !== ""){
+      // setLabelActive(true); 
+      setLabelPosition([point.x, point.y, point.z]);
+      // setLabelTitle(label);
+      // setLabelDesc(components.find(component => component.name === label).desc);
+      setComponent(label);
+      const comp = components.find(component => component.name === label)
+      setDescription(comp.desc)
+      setOrbPosition([(comp.maxX - comp.minX)/2 + comp.minX, comp.maxY + 0.1, (comp.maxZ - comp.minZ)/2 + comp.minZ])
+    }
     console.log(label);
   };
+  const toggleLabel = () => {
+    setLabelActive(!labelActive);
+  }
 
   return (
     <div style={{ display: 'flex', height: '300px', width: '100%' }}>
@@ -93,10 +131,11 @@ function RaycastWrapper({ children }) {
      camera={{ position: [5, 3, 5], fov: 30 }}
      style={{ width: '100%', height: '100%' }}
      resize={{ scroll: true, debounce: { scroll: 50, resize: 50 } }} // recalculate size on parent resize
+     frameloop="demand"
    >
    
       {/* Ambient Light to brighten the entire scene */}
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.8} />
 
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={3} />
     <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
@@ -110,16 +149,26 @@ function RaycastWrapper({ children }) {
         maxZ={0.6}
 
     /> */}
-    {/* <Html position={labelPosition} center>
+    {/* Render the orb */}
+    <mesh position={orbPosition} ref={orbRef}>
+        <sphereGeometry args={[0.1, 16, 16]} />
+        <meshStandardMaterial color="red" />
+    </mesh>
+    {labelActive && 
+    <Html position={labelPosition} center>
       <StandardLabel 
-          title={"test title"}
-          description={"label test"}
-          showLabel={setLabel}
+          title={labelTitle}
+          description={labelDesc}
+          showLabel={toggleLabel} // pass in toggle function so that label knows how to handle clicking the x
       />
-    </Html> */}
+    </Html>
+}
     {/* Render children components that the wrapper encapsulates (the actual model) */}
     {children}
-      <OrbitControls enableZoom enablePan enableRotate />
+      <OrbitControls 
+        enableZoom 
+        enablePan 
+        enableRotate={!labelActive} />
       <RaycastHandler onFaceClick={handleFaceClick} />
     </Canvas>
     </div>

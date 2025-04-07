@@ -37,8 +37,7 @@ Component for booking lab time slots using React and Material UI.
 
 ## Behavior
 - Only one slot can be selected
-- Button disabled unless a slot is selected
-- Spinner shown during submission
+- `Select` button is only enabled for available slots
 - Error messages for no slot selected or failed booking
 
 ## Dependencies

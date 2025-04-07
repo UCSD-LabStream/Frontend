@@ -7,7 +7,7 @@ Component for booking lab time slots using React and Material UI.
 
 ## Key Features
 - Fetches and displays time slots from backend.
-- Allows primary and additional email entry.
+- Allows primary and additional email entries.
 - Selects and confirms a single time slot.
 - Submits booking data to backend.
 

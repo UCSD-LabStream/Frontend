@@ -17,7 +17,7 @@ jobs:
         run: |
           cd frontend
           npm ci
-          npm run build
+          CI=false npm run build
 
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.7

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
 import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 // import 'materialize-css/dist/css/materialize.min.css';
@@ -31,7 +31,16 @@ const SignUp = () => {
             setIsLoading(true);
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             console.log("User signed up:", userCredential);
-            navigate('/'); 
+            const user = userCredential.user;
+
+            await sendEmailVerification(user);
+            console.log("Verification email sent");
+            await signOut(auth);
+            setError("Please verify your email before logging in.");
+            setTimeout(() => {
+              navigate('/splashscreen/Login');
+          }, 3000);
+            
         } catch (error) {
             setError(error.message);
         } finally {

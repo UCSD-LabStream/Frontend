@@ -15,7 +15,7 @@ const pages = ['Help', 'Booking', 'Slots', 'Log Out'];
 
 export const NavBar = () => {
     const navigate = useNavigate();
-    const { setUser } = useUser();
+    const { user, setUser } = useUser();
 
     const handleLogOut = async () => {
       const confirmation = window.confirm("Are you sure you want to log out?");
@@ -39,6 +39,10 @@ export const NavBar = () => {
         navigate(`/${page}`);
       }
     };
+
+    const visiblePages = user != null
+    ? pages
+    : pages.filter((page) => page !== 'Log Out'); 
   
     return (
       <AppBar position="sticky" sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
@@ -81,7 +85,7 @@ export const NavBar = () => {
               LabStream
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+              {visiblePages.map((page) => (
                 <Button
                   key={page}
                   onClick={() => handleNavigation(page)}

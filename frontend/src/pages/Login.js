@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut} from "firebase/auth";
 import { auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom'; 
 // import 'materialize-css/dist/css/materialize.min.css';
@@ -22,6 +22,12 @@ const Login = () => {
             setIsLoading(true);
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log("User logged in:", userCredential.user.email);
+            const user = userCredential.user;
+            if (!user.emailVerified) {
+                setError("Please verify your email before logging in.");
+                signOut(auth);
+                return; // Don't proceed if the email is not verified
+            }
             setUser(userCredential.user);
             navigate('/'); 
         } catch (error) {

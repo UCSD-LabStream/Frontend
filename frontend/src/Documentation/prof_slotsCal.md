@@ -22,7 +22,7 @@ This is a React-based calendar component that allows authenticated users to book
 - View all created slots (color-coded)
 - Delete future slots that the current user has created
 - Auto-refresh deletable slots every minute
-- Prevent booking on already reserved slots unless the current user created them
+- Prevent booking on already reserved slots
 
 ---
 
@@ -79,6 +79,6 @@ Fetches all slots from the database, filters them to identify:
 
 ## How Deletion Works
 
-- A slot can be deleted if its `startTime` is in the future.
+- A slot can be deleted if its `startTime` is at least 1 minute in the future.
 - This check is run every minute to keep `deletableSlots` up to date.
 

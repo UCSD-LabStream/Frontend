@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import ClickableFourierOptics from '../models/ClickableFourierOptics';
+import ThreeD from '../3D.js';
 import TextCard from '../components/TextCard';
 import { Typography, IconButton, Box } from '@mui/material'
 import { FastForward, RotateRight, RotateLeft, Pause } from '@mui/icons-material';
@@ -22,7 +22,7 @@ function Trial() {
         
         {/* Box Model Container */}
         <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <ClickableFourierOptics />
+          <ThreeD />
         </Box>
 
         {/* Right Card */}

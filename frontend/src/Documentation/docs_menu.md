@@ -16,4 +16,9 @@ Students have access to different pages which have limited permissions when inte
 
 ## Professor View 
 
-Professors have access to other pages which have also have minited permission when interacting with the database. However, the professors can make more changes to the data.  
+Professors have access to other pages which have also have minited permission when interacting with the database. However, the professors can make more changes to the data.
+
+## 3D Models
+
+[Click here for 3D documentation](./3D.md)
+

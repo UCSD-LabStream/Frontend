@@ -23,7 +23,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SlotsCalendar from './SlotsCalendar.js';
 
 
-
 const theme = createTheme({
   components: {
     MuiInputLabel: {

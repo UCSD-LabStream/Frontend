@@ -13,7 +13,7 @@ import RotateRight from '@mui/icons-material/RotateRight';
 import RotateLeft from '@mui/icons-material/RotateLeft';
 import FastForward from '@mui/icons-material/FastForward';
 
-const SOCKET_URL = 'http://13.57.216.198';
+const SOCKET_URL = 'https://labstream.ucsd.edu';
 
 function App() {
 	const connecting = useRef(false);

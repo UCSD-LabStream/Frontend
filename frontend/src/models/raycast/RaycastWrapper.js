@@ -122,21 +122,21 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
   }
 
   return (
-    <div style={{ display: 'flex', height: '300px', width: '100%' }}>
+    <div style={{ display: 'flex', height: '400px', width: '100%' }}>
 
       <Canvas
-        camera={{ position: [5, 3, 5], fov: 30 }}
+        camera={{ position: [10, 6, 10], fov: 30 }}
         style={{ width: '100%', height: '100%' }}
         resize={{ scroll: true, debounce: { scroll: 50, resize: 50 } }} // recalculate size on parent resize
         frameloop="demand"
       >
 
         {/* Ambient Light to brighten the entire scene */}
-        <ambientLight intensity={0.8} />
+        <ambientLight intensity={1} />
 
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={3} />
-        <pointLight position={[-10, -10, -10]} decay={0} intensity={3} />
-
+        {/* PointLights in two locations to fully illuminate the scene */}
+        <pointLight position={[-10, -10, -10]} decay={0} intensity={2} />
+        <pointLight position={[10, 10, 10]} decay={0} intensity={2} />
         {/* 
         Example of how to include the translucent box for fine-tuning compnoent bounds
         <Box 

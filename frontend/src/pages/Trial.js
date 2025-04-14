@@ -10,25 +10,16 @@ function Trial() {
     return(
        <Box sx={{ color: "white", height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       {/* Title */}
-      <Typography variant="h2" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-        Rotating Box Model
+      <Typography variant="h2" sx={{ textAlign: 'center', fontWeight: 'bold', mt:20 }}>
+        Fourier Optics Model 
       </Typography>
-      <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
-        
-        {/* Left Card */}
-        <Box sx={{ flex: 1, p: 2, display: 'flex', justifyContent: 'center'}}>
-          <TextCard title="Interact With the Model" content="Left-click on the boxes to change their size." />
-        </Box>
-        
+      <Box sx={{ display: 'flex', width: '90%', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
+
         {/* Box Model Container */}
         <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <ThreeD />
         </Box>
 
-        {/* Right Card */}
-        <Box sx={{ flex: 1, p: 2, display: 'flex', justifyContent: 'center' }}>
-          <TextCard title="Change Perspective" content="Left-click and move your mouse to rotate around the model. You can also zoom in and out." />
-        </Box>
       </Box>
 
       {/* Control Buttons */}

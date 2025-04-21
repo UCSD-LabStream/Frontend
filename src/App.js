@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import './App.scss';
 import {io} from "socket.io-client";
+import { Peer } from 'peerjs';
 import { Paper, Slider, TextField, SvgIcon, IconButton, Typography, Stack, Switch, Button } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2'
@@ -45,6 +46,7 @@ function App() {
 		expandWebcam(!webcamExpand)
 	}
 
+	// websocket for motors
 	useEffect(() => {
         if (connecting.current) return;
         connecting.current = true;
@@ -78,6 +80,47 @@ function App() {
             toast.error('Failed to connect to the server');
         }
     }, []);
+
+	// websocket for webcam viewer
+	useEffect(() => {
+		const cameraSocket = io(SOCKET_URL, {
+			path: '/camera',
+			transports: ['websocket']
+		});
+
+		var peer = new Peer();
+		let viewerId;
+
+		peer.on('call', function(call) {
+			call.answer();
+			call.on('stream', (stream) => {
+				let videoTracks = stream.getVideoTracks();
+				for (let i = 0; i < videoTracks.length; i++) {
+					if (!document.getElementById(`video${i}`)) {
+						document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
+					}
+					document.getElementById(`video${i}`).srcObject = new MediaStream([videoTracks[i]]);
+				}
+			})
+		});
+
+		cameraSocket.on('connect', async (event) => {
+			await new Promise(resolve => {
+				const checkViewerId = setInterval(() => {
+					if (typeof viewerId !== 'undefined') {
+						clearInterval(checkViewerId);
+						resolve();
+					}
+				}, 100);
+			});
+		
+			cameraSocket.emit("stream_view", JSON.stringify({
+				'client': '8555',
+				'operation': 'connecting',
+				'viewerId': viewerId
+			}));
+		});
+	})
 
 	return (
 		// <div className="app-wrapper">
@@ -152,7 +195,13 @@ function App() {
 							</Button>
 						</Stack>
 					</div>
-					<img src="/AllPurposeFiller.jpg" style={{ height: '90%', width: 'auto', objectFit: 'cover' }} />
+					<div className="h-[80%] mt-4 flex flex-col gap-4 items-center">
+						<div className="flex-1 flex gap-4 overflow-hidden">
+							<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video0" autoplay></video></div>
+							<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video1" autoplay></video></div>
+						</div>
+						<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video2" autoplay></video></div>
+					</div>
 				</Grid>
 
 			</Grid>

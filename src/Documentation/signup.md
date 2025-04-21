@@ -1,4 +1,4 @@
-# 🔐 SignUp Component
+# SignUp Component
 
 A React + Firebase component that lets users create an account with email/password and verifies their email before login.
 
@@ -23,15 +23,16 @@ A React + Firebase component that lets users create an account with email/passwo
 
 ---
 
-## Key Flow
+## How It Works
 
-1. User fills in form
-2. Passwords must match and be ≥6 chars
-3. Creates Firebase user
-4. Sends verification email
-5. Signs user out
-6. Redirects to login after 3s
 
+- Uses `useState` to track form input and state (`email`, `password`, `confirmPassword`, `error`, `isLoading`)
+- On form submit:
+  - Checks if passwords match and meet length requirement
+  - Uses `createUserWithEmailAndPassword()` to register user
+  - Calls `sendEmailVerification()` to trigger a verification email
+  - Immediately signs out user with `signOut()`
+  - Redirects to `/splashscreen/Login` after a short delay
 ---
 
 ## Firebase Auth Setup

@@ -42,7 +42,7 @@ export const NavBar = () => {
 
     const visiblePages = user != null
     ? pages
-    : pages.filter((page) => page !== 'Log Out'); 
+    : pages.filter((page) => page !== 'Log Out');  
   
     return (
       <AppBar position="sticky" sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>

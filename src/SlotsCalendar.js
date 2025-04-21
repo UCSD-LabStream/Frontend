@@ -3,6 +3,7 @@ import writeSlots from './components/Write_slots';
 import readSlots from './components/Read';
 import { getAuth } from "firebase/auth"; 
 import DeleteSlots from "./components/DeleteSlots";
+import CustomAlert from './components/CustomAlert';
 
 // Utility function to get the date for a specific day of the current week
 const getDateOfWeek = (dayOffset) => {
@@ -20,6 +21,8 @@ const SlotsCalendar = () => {
   const [createdSlots, setCreatedSlots] = useState([]);
   const [myCreatedSlots, setMyCreatedSlots] = useState([]);
   const [deletableSlots, setDeletableSlots] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [slotToDelete, setSlotToDelete] = useState(null); 
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -135,7 +138,6 @@ const SlotsCalendar = () => {
       window.location.reload();
     }, 3000);
   };
-
   const handleDeleteSlot = (slot) => {
     const startTime = slot.startTime.toDate().toLocaleString();
     const endTime = slot.endTime.toDate().toLocaleString();

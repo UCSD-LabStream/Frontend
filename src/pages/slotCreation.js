@@ -24,7 +24,7 @@ const SlotCreation = () => {
     console.log('Form Data:', formData);
     writeSlots(formData.startTime, formData.endTime);
     alert(
-      `Slot created for course ${formData.course_no} from ${formData.startTime} to ${formData.endTime}`
+      `Booking these slots`
     );
   };
 

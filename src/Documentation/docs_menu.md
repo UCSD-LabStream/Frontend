@@ -12,7 +12,7 @@ This react application is stores and manages all user data using firebase. The f
 
 ## Student View
 
-Students have access to different pages which have limited permissions when interacting with the database. 
+Students have access to different pages which have limited permissions when interacting with the database. \\
 [Students Booking Documentation](./stud_booking.md)
 
 ## Professor View 

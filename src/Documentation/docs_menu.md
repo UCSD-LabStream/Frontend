@@ -13,10 +13,12 @@ This react application is stores and manages all user data using firebase. The f
 ## Student View
 
 Students have access to different pages which have limited permissions when interacting with the database. 
+[Students View](./students.md)
 
 ## Professor View 
 
-Professors have access to other pages which have also have minited permission when interacting with the database. However, the professors can make more changes to the data.
+Professors have access to other pages which have also have limited permission when interacting with the database. However, the professors can make more changes to the data.
+[Professors View](.professor.md)
 
 ## 3D Models
 

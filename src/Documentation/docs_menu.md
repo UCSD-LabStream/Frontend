@@ -22,6 +22,14 @@ Professors have access to other pages which have also have limited permission wh
 
 [Professors Slots Creation Documentation](./prof_slotsCal.md)
 
+## Authentication
+
+Sign Up - For new users to sign up to Labstream 
+[Sign Up Documentation](./signup.md)
+
+Login - For existing users to login into the website 
+[Login Documentation](./login.md)
+
 ## 3D Models
 
 [Click here for 3D documentation](./3D.md)

@@ -7,7 +7,7 @@ Authors: Ridhi Srikanth
 This react application is stores and manages all user data using firebase. The following database functionalities have been implemented in the code: 
 
 - Read.js reads the data from the database and returns an array of objects. 
-- Write_slots.js writes new data to the database 
+- Write_slots.js writes new slots to database
 - DeleteSlots.js is used to delete a slot in the database. It takes slotId as a parameter and then deletes that slot. 
 
 ## Student View

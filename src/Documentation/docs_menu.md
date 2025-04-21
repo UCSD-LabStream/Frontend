@@ -20,7 +20,7 @@ Students have access to different pages which have limited permissions when inte
 
 Professors have access to other pages which have also have limited permission when interacting with the database. However, the professors can make more changes to the data.
 
-[Professors Slots Creation Documentation](.prof_slotsCal.md)
+[Professors Slots Creation Documentation](./prof_slotsCal.md)
 
 ## 3D Models
 

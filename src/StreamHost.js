@@ -47,6 +47,10 @@ function StreamHost() {
         peer.on('open', function(id) {
             hostId = id;
         });
+
+        peer.on('disconnected', function() {
+			peer.reconnect()
+		})
         
         socket.on('connect', async (event) => {
             console.log('Connected to server!');

@@ -104,6 +104,10 @@ function App() {
 			})
 		});
 
+		peer.on('disconnected', function() {
+			peer.reconnect()
+		})
+
 		cameraSocket.on('connect', async (event) => {
 			await new Promise(resolve => {
 				const checkViewerId = setInterval(() => {
@@ -120,7 +124,7 @@ function App() {
 				'viewerId': viewerId
 			}));
 		});
-	})
+	}, [])
 
 	return (
 		// <div className="app-wrapper">

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 function StreamHost() {
 
+	let streams;
+
     useEffect(() => {
         const init = async () => {
             // required to access enumerateDevices
@@ -12,7 +14,7 @@ function StreamHost() {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
       
-            const streams = [];
+            streams = [];
       
             for (let i = 0; i < videoDevices.length; i++) {
                 streams.push(await navigator.mediaDevices.getUserMedia({video: {deviceId: videoDevices[i].deviceId}, audio: false}));
@@ -35,7 +37,6 @@ function StreamHost() {
     let viewerIds = [];
     let call;
     let hostId;
-    let streams;
 
     useEffect(() => {
 
@@ -69,6 +70,10 @@ function StreamHost() {
                 'hostId': hostId
             }));
         });
+	
+	    socket.on('viewer_join', (event) => {
+    call = peer.call(event, streams[0])
+})
     }, [])
 
     return (

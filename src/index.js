@@ -103,6 +103,7 @@ root.render(
           <Route path="/" element={<App />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/Host" element={<StreamHost />} />
           
           
           {/* Nested Protected Route for Professors */}
@@ -110,7 +111,6 @@ root.render(
             {/*<Route path="/Slots" element={<SlotCreation />} /> */}
             <Route path="/MySlots" element={<MySlots />} />
             <Route path="/Slots" element={<SlotsCalendar />} />
-            <Route path="/Host" element={<StreamHost />} />
           </Route>
         </Route>
       </Routes>

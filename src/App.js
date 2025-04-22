@@ -91,9 +91,14 @@ function App() {
 		var peer = new Peer();
 		let viewerId;
 
+		peer.on('open', function(id) {
+			viewerId = id
+		});
+
 		peer.on('call', function(call) {
 			call.answer();
 			call.on('stream', (stream) => {
+				console.log("Retrieving stream")
 				let videoTracks = stream.getVideoTracks();
 				for (let i = 0; i < videoTracks.length; i++) {
 					if (!document.getElementById(`video${i}`)) {
@@ -109,6 +114,7 @@ function App() {
 		})
 
 		cameraSocket.on('connect', async (event) => {
+			console.log("Connected to camera server!")
 			await new Promise(resolve => {
 				const checkViewerId = setInterval(() => {
 					if (typeof viewerId !== 'undefined') {

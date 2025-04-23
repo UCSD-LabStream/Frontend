@@ -77,7 +77,7 @@ function StreamHost() {
     }, [])
 
     return (
-        <div id="main-page"></div>
+        <div id="main-page" className="flex"></div>
     )
 }
 

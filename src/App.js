@@ -3,16 +3,13 @@ import { useEffect, useState, useRef } from 'react';
 import './App.scss';
 import {io} from "socket.io-client";
 import { Peer } from 'peerjs';
-import { Paper, Slider, TextField, SvgIcon, IconButton, Typography, Stack, Switch, Button } from '@mui/material'
+import { Paper, Slider, TextField, SvgIcon, IconButton, Typography, Stack, Switch, Button, Icon } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2'
 import ThreeD from './3D';
 import toast, {Toaster} from "react-hot-toast";
 
-import Pause from '@mui/icons-material/Pause';
-import RotateRight from '@mui/icons-material/RotateRight';
-import RotateLeft from '@mui/icons-material/RotateLeft';
-import FastForward from '@mui/icons-material/FastForward';
+import { OpenInFull, CloseFullscreen, Pause, RotateRight, RotateLeft, FastForward } from '@mui/icons-material';
 
 const SOCKET_URL = 'https://labstream.ucsd.edu';
 
@@ -44,6 +41,21 @@ function App() {
 	const [webcamExpand, expandWebcam] = useState(false)
 	const handleWebcamExpand = () => {
 		expandWebcam(!webcamExpand)
+	}
+
+	// store the streams
+	const [streams, addStream] = useState({})
+
+	// allow for expandable video
+	const [videoExpand, expandVideo] = useState(0)
+	const videoExpandRef = useRef(null)
+	const handleVideoExpand = (videoId) => {
+		expandVideo(videoId)
+		if (videoExpandRef.current != null && videoId != 0) {
+			console.log(videoId)
+			console.log(streams)
+			videoExpandRef.current.srcObject = streams["video" + (videoId - 1)]
+		}
 	}
 
 	// websocket for motors
@@ -98,14 +110,18 @@ function App() {
 		peer.on('call', function(call) {
 			call.answer();
 			call.on('stream', (stream) => {
-				console.log("Retrieving stream")
 				let videoTracks = stream.getVideoTracks();
+				let tempStreams = {} // necessary since useState doesn't save correctly in for loop
 				for (let i = 0; i < videoTracks.length; i++) {
-					if (!document.getElementById(`video${i}`)) {
-						document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
-					}
+					// THIS IS ONLY IN CASE THE VIDEO DOESN'T ALREADY EXIST IN DOM
+					// if (!document.getElementById(`video${i}`)) {
+					// 	document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
+					// }
+
+					tempStreams[`video${i}`] = new MediaStream([videoTracks[i]])
 					document.getElementById(`video${i}`).srcObject = new MediaStream([videoTracks[i]]);
 				}
+				addStream({...tempStreams})
 			})
 		});
 
@@ -133,7 +149,6 @@ function App() {
 	}, [])
 
 	return (
-		// <div className="app-wrapper">
 		<body>
 			<Toaster position="bottom-left"  />
 
@@ -188,9 +203,6 @@ function App() {
 								<RotateRight color={motorInput.imageMotor > 0 ? 'secondary' : ''} />
 							</IconButton>
 							<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)}); handleImageTwoTimes(!isImageTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)})}}>
-								{/* <SvgIcon>
-								<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 449.851"><g fill-rule="nonzero"><path fill={isImageTwoTimes ? "blue" : "black"} d="M153.143 219.364l-4.867-26.516c15.716-4.737 31.372-7.106 46.96-7.106 6.241 0 11.445.183 15.624.559 4.178.376 8.513 1.31 13.003 2.809 4.49 1.493 8.046 3.55 10.667 6.171 5.988 5.988 8.98 15.157 8.98 27.505 0 12.348-3.491 21.452-10.479 27.317-6.982 5.86-21.704 12.595-44.154 20.206v7.955h52.763v27.219h-95.984v-23.385c0-15.525 3.97-23.486 15.715-33.117 3.367-2.87 7.89-5.614 13.567-8.234a4349.194 4349.194 0 0116.091-7.39c5.05-2.31 9.137-4.211 12.253-5.706v-11.468c-5.613-.627-10.787-.938-15.528-.938-11.474 0-23.016 1.374-34.611 4.119zm144.908-30.818l12.908 31.248h1.873l12.908-31.248h40.599l-26.006 56.503 26.006 60.434h-41.534l-14.034-33.676h-1.681l-13.848 33.676h-39.664l25.447-59.311-25.447-57.626h42.473z"/></g></svg>
-								</SvgIcon> */}
 								<FastForward color={isImageTwoTimes ? 'secondary' : ''}/>
 							</IconButton>
 						</div>
@@ -205,12 +217,32 @@ function App() {
 							</Button>
 						</Stack>
 					</div>
-					<div className="h-[80%] mt-4 flex flex-col gap-4 items-center">
-						<div className="flex-1 flex gap-4 overflow-hidden">
-							<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video0" autoplay></video></div>
-							<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video1" autoplay></video></div>
+
+					{/* expanded view */}
+					<div className={videoExpand == 0 ? "hidden" : "flex justify-center h-full w-full"}>
+						<div className="h-[80%] w-[50vw] max-w-full mt-4 bg-slate-300 rounded-md overflow-hidden relative">
+							<IconButton className="z-10 absolute"><CloseFullscreen onClick={() => handleVideoExpand(0)} /></IconButton>
+							<video ref={videoExpandRef} className="top-0 left-0 absolute h-full w-full object-cover" autoPlay></video>
 						</div>
-						<div className="flex-1 bg-slate-300 rounded-md overflow-hidden"><video className="h-full w-auto" id="video2" autoplay></video></div>
+					</div>
+					
+
+					{/* default view */}
+					<div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "" : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
+						<div className={(webcamExpand ? "flex-col " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
+							<div className="relative flex-1 w-full bg-slate-300 rounded-md overflow-hidden">
+								<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
+								<video className="top-0 left-0 absolute h-full w-full object-cover" id="video0" autoPlay></video>
+							</div>
+							<div className="relative flex-1 bg-slate-300 rounded-md overflow-hidden">
+								<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(2)} /></IconButton>
+								<video className="top-0 left-0 absolute h-full w-full object-cover" id="video1" autoPlay></video>
+							</div>
+						</div>
+						<div className="relative flex-1 bg-slate-300 rounded-md overflow-hidden w-[55%] h-full">
+							<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(3)} /></IconButton>
+							<video className="top-0 left-0 absolute h-full w-full object-cover" id="video2" autoPlay></video>
+						</div>
 					</div>
 				</Grid>
 

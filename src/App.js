@@ -89,13 +89,14 @@ function App() {
                 console.log(data);
             }, 200);
 
-			socket.on('filter_motor_done', () => {
-				handleSpeedUpdate({ ...motorInput, filterMotor: 0 });
-			}, 200);
+		    socket.on('filter_motor_done', () => {
+			    handleSpeedUpdate({ ...motorInput, filterMotor: 0 });
+		    }, 200);
 
-			socket.on('image_motor_done', () => {
-				handleSpeedUpdate({ ...motorInput, imageMotor: 0 });
-			}, 200);
+		    socket.on('image_motor_done', () => {
+			    handleSpeedUpdate({ ...motorInput, imageMotor: 0 });
+		    }, 200);
+
         } catch(e) {
             toast.error('Failed to connect to the server');
         }

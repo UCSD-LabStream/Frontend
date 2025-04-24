@@ -82,20 +82,20 @@ function App() {
             // there is a new gear state, update the gear
             socket.on('gear', (data) => {
                 // set_gear_state(data);
-				handleSpeedUpdate({imageMotor : 0, filterMotor : 0})
+		handleSpeedUpdate({imageMotor : 0, filterMotor : 0})
                 toast.success('Gear State has been retrieved or updated.',  {
                     duration: 5000
                 });
                 console.log(data);
             }, 200);
 
-		    socket.on('filter_motor_done', () => {
-			    handleSpeedUpdate({ ...motorInput, filterMotor: 0 });
-		    }, 200);
+	    socket.on('filter_motor_done', () => {
+		handleSpeedUpdate({ ...motorInput, filterMotor: 0 });
+	    }, 200);
 
-		    socket.on('image_motor_done', () => {
-			    handleSpeedUpdate({ ...motorInput, imageMotor: 0 });
-		    }, 200);
+	    socket.on('image_motor_done', () => {
+		handleSpeedUpdate({ ...motorInput, imageMotor: 0 });
+	    }, 200);
 
         } catch(e) {
             toast.error('Failed to connect to the server');

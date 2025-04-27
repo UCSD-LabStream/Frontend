@@ -47,8 +47,15 @@ const components = [
     {
         name: "Objective lens",
         desc: "Magnifies the target and collects light to focus it onto the Fourier or image plane.",
-        minX: 2.2, maxX: 2.7,
+        minX: 2, maxX: 2.5,
         minY: 0, maxY: 2,
+        minZ: -0.6, maxZ: 0.6
+    },
+    {
+        name: "Filter mask",
+        desc: "<Description here>",
+        minX: 2.6, maxX: 2.9,
+        minY: 0, maxY: 1.5,
         minZ: -0.6, maxZ: 0.6
     },
     {
@@ -56,7 +63,14 @@ const components = [
         desc: "Directs part of the light beam to an alternate path for simultaneous observation or measurement.",
         minX: 3.1, maxX: 3.7,
         minY: 0, maxY: 2,
-        minZ: -0.6, maxZ: 0.6
+        minZ: -0.4, maxZ: 0.6
+    },
+    {
+        name: "Projection Lens",
+        desc: "<Enter description here>",
+        minX: 3.1, maxX: 3.7,
+        minY: 0, maxY: 2,
+        minZ: -0.8, maxZ: -0.4
     },
     {
         name: "Tube lens",
@@ -66,11 +80,18 @@ const components = [
         minZ: -0.6, maxZ: 0.6
     },
     {
-        name: "Camera",
+        name: "Camera 1",
         desc: "Records images or diffraction patterns for analysis and documentation.",
         minX: 4.8, maxX: 6,
         minY: 0, maxY: 2,
         minZ: -0.6, maxZ: 0.6
+    },
+    {
+        name: "Camera 2",
+        desc: "Records images or diffraction patterns for analysis and documentation.",
+        minX: 3.1, maxX: 3.7,
+        minY: 0, maxY: 1.5,
+        minZ: -2.6, maxZ: -1.3
     }
 ];
 

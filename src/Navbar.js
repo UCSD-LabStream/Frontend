@@ -21,7 +21,7 @@ export const NavBar = () => {
     const hosts = ["rsrikanth@ucsd.edu", "wal009@ucsd.edu", "sabaghda@ucsd.edu", "hlonsdale@ucsd.edu", "prashk135@gmail.com"];
     const isHost = user && hosts.includes(user.email);
 
-    const isProfessor = user && professors.includes(user.email); sssssssssss                                                                                                                                                                                                                                                        ws
+    const isProfessor = user && professors.includes(user.email);                                                                                                                                                                                                                                                      ws
     const handleLogOut = async () => {
       const confirmation = window.confirm("Are you sure you want to log out?");
       if (confirmation) {

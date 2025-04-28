@@ -57,10 +57,6 @@ function RaycastHandler({ onFaceClick }) {
 
 // Helper function to map a point to a component (or no component) and return the relevant label
 function getLabelFromCoordinates([x, y, z]) {
-  if (y < 0 || y > 2 || z < -0.6 || z > 0.6) {
-    console.log("y or z OOB");
-    return "";
-  }
 
   for (const part of components) {
     if (x >= part.minX && x <= part.maxX &&
@@ -120,6 +116,7 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
   const toggleLabel = () => {
     setLabelActive(!labelActive);
   }
+  const TranslucentBoxComponent = components.find(c => c.name === "Filter slit");
 
   return (
     <div style={{ display: 'flex', height: '400px', width: '100%' }}>
@@ -138,15 +135,16 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
         <pointLight position={[-10, -10, -10]} decay={0} intensity={2} />
         <pointLight position={[10, 10, 10]} decay={0} intensity={2} />
         {/* 
-        Example of how to include the translucent box for fine-tuning compnoent bounds
-        <Box 
-        minX={-6.1}
-        maxX={-5.44}
-        minY={0}
-        maxY={2}
-        minZ={-0.6}
-        maxZ={0.6}
-    /> */}
+        Example of how to include the translucent box for fine-tuning compnoent bounds*/}
+        
+        {/* <Box 
+        minX={TranslucentBoxComponent.minX}
+        maxX={TranslucentBoxComponent.maxX}
+        minY={TranslucentBoxComponent.minY}
+        maxY={TranslucentBoxComponent.maxY}
+        minZ={TranslucentBoxComponent.minZ}
+        maxZ={TranslucentBoxComponent.maxZ}
+    />  */}
         {labelActive &&
             <mesh position={orbPosition} ref={orbRef}>
               <sphereGeometry args={[0.1, 16, 16]} />

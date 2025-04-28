@@ -22,6 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CssBaseline from "@mui/material/CssBaseline";
 import SlotsCalendar from './SlotsCalendar.js';
 import StreamHost from './StreamHost.js';
+import HostRoute from './components/hostRoute.js';
 
 
 const theme = createTheme({
@@ -103,9 +104,10 @@ root.render(
           <Route path="/" element={<App />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/booking" element={<Booking />} />
-          <Route path="/Host" element={<StreamHost />} />
           
-          
+          <Route element={<HostRoute />}>
+            <Route path="/Host" element={<StreamHost />} />
+          </Route>
           {/* Nested Protected Route for Professors */}
           <Route element={<ProfessorRoute />}>
             {/*<Route path="/Slots" element={<SlotCreation />} /> */}

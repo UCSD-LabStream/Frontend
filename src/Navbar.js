@@ -11,39 +11,49 @@ import { useUser } from './components/UserContext';
 import { signOut } from 'firebase/auth';
 import { auth } from './Firebase/firebase';
 
-const pages = ['Help', 'Booking', 'Slots', 'Host', 'Log Out'];
+const allPages = ['Help', 'Booking', 'Slots', 'Host', 'Log Out'];
 
 export const NavBar = () => {
     const navigate = useNavigate();
     const { user, setUser } = useUser();
+    
+    // Define your list of host users
+    const hosts = ["rsrikanth@ucsd.edu", "wal009@ucsd.edu", "sabaghda@ucsd.edu", "hlonsdale@ucsd.edu", "prashk135@gmail.com"];
+    const isHost = user && hosts.includes(user.email);
 
+    const isProfessor = user && professors.includes(user.email); sssssssssss                                                                                                                                                                                                                                                        ws
     const handleLogOut = async () => {
       const confirmation = window.confirm("Are you sure you want to log out?");
       if (confirmation) {
-        try{
+        try {
           console.log("handling logout");
           await signOut(auth);
           setUser(null);
           navigate('/splashscreen');
-      } catch(error){
-        console.error("Error logging out");
+        } catch (error) {
+          console.error("Error logging out");
+        }
       }
     }
-    }
-  
+
     const handleNavigation = (page) => { 
-      if(page === 'Log Out') { 
+      if (page === 'Log Out') { 
         handleLogOut(); 
-      }
-      else{
+      } else {
         navigate(`/${page}`);
       }
     };
 
+    // Customize visible pages based on user type
     const visiblePages = user != null
-    ? pages
-    : pages.filter((page) => page !== 'Log Out');  
-  
+      ? allPages.filter((page) => {
+          if (page === 'Log Out') return true;
+          if (page === 'Host') return isHost; // Only show Host if user is host
+          if (page === 'Slots') return isProfessor;
+          return true;
+        })
+      : allPages.filter((page) => page !== 'Log Out');  
+
     return (
       <AppBar position="sticky" sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
         <Container maxWidth="xl">
@@ -62,10 +72,11 @@ export const NavBar = () => {
                 color: 'inherit',
                 textDecoration: 'none',
               }}
-              onClick={()=>navigate('/')}
+              onClick={() => navigate('/')}
             >
               LabStream
             </Typography>
+
             <Diversity2Icon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
             <Typography
               variant="h5"
@@ -84,6 +95,7 @@ export const NavBar = () => {
             >
               LabStream
             </Typography>
+
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {visiblePages.map((page) => (
                 <Button
@@ -99,5 +111,4 @@ export const NavBar = () => {
         </Container>
       </AppBar>
     );
-  };
-  
+};

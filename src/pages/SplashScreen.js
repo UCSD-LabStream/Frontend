@@ -14,6 +14,7 @@ import {
 import ScienceIcon from '@mui/icons-material/Science';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import ThreeD from '../3D'; // Import your 3D model component
 
 function SplashScreen() {
   const navigate = useNavigate();
@@ -171,41 +172,7 @@ function SplashScreen() {
                 overflow: 'hidden',
               }}
             >
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  fontSize: '1.5rem',
-                  color: '#999',
-                  background: 'linear-gradient(45deg, #f5f5f5 25%, #f9f9f9 25%, #f9f9f9 50%, #f5f5f5 50%, #f5f5f5 75%, #f9f9f9 75%, #f9f9f9 100%)',
-                  backgroundSize: '20px 20px',
-                }}
-              >
-                <Box
-                  sx={{
-                    p: 4,
-                    borderRadius: '8px',
-                    backgroundColor: 'rgba(255,255,255,0.8)',
-                    backdropFilter: 'blur(5px)',
-                    boxShadow: '0 4px 30px rgba(0,0,0,0.1)',
-                    border: '1px solid rgba(255,255,255,0.3)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 2,
-                  }}
-                >
-                  <Typography variant="h5" fontWeight="bold" color="#333">
-                    Remote Lab Control Interface
-                  </Typography>
-                  <Typography color="#666">
-                    3D Interactive Experience Coming Soon
-                  </Typography>
-                </Box>
-              </Box>
+              <ThreeD />
             </Box>
           </Card>
         </Box>

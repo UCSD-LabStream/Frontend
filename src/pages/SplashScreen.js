@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Box, 
-  Button, 
-  Typography, 
-  Container, 
-  Grid, 
-  Card, 
+import {
+  Box,
+  Button,
+  Typography,
+  Container,
+  Grid,
+  Card,
   CardContent,
   useMediaQuery,
   useTheme
@@ -85,16 +85,17 @@ function SplashScreen() {
           py: { xs: 6, md: 10 },
           position: 'relative',
           zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         {/* Header */}
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
             textAlign: 'center',
             mb: 8,
+            maxWidth: '900px',
           }}
         >
           <Typography
@@ -132,6 +133,7 @@ function SplashScreen() {
               color: '#555',
               fontWeight: 500,
               mb: 5,
+              mx: 'auto',
               maxWidth: '800px',
             }}
           >
@@ -140,42 +142,33 @@ function SplashScreen() {
         </Box>
 
         {/* Hero Placeholder */}
-        <Box
+        <Card
+          elevation={8}
           sx={{
-            position: 'relative',
             width: '100%',
+            maxWidth: '1000px',
+            height: '450px',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
             mb: 10,
             display: 'flex',
             justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <Card
-            elevation={8}
+          <Box
             sx={{
               width: '100%',
-              maxWidth: '1000px',
-              height: '450px',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <Box
-              sx={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              <ThreeD />
-            </Box>
-          </Card>
-        </Box>
+            <ThreeD />
+          </Box>
+        </Card>
 
         {/* CTA Buttons */}
         <Box
@@ -183,6 +176,7 @@ function SplashScreen() {
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'center',
+            alignItems: 'center',
             gap: { xs: '16px', sm: '24px' },
             mb: 10,
           }}
@@ -209,7 +203,7 @@ function SplashScreen() {
           >
             Login
           </Button>
-          
+
           <Button
             variant="outlined"
             size="large"
@@ -279,7 +273,6 @@ function SplashScreen() {
           sx={{
             width: '100%',
             maxWidth: '900px',
-            mx: 'auto',
             textAlign: 'center',
             mb: 8,
           }}

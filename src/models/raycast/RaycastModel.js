@@ -1,50 +1,33 @@
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import React, { Suspense } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei'; // Import OrbitControls
+import { OrbitControls, useGLTF, Html, useProgress } from '@react-three/drei'; // Import OrbitControls
 
-// OBJ Model Renderer
-function ModelRender({ objUrl, mtlUrl, scale, position, rotation }) {
-    const materials = useLoader(MTLLoader, mtlUrl);
-    const geom = useLoader(OBJLoader, objUrl, (loader) => {
-        if (materials) {
-            materials.preload();
-            loader.setMaterials(materials);
-        }
-    });
+function Loader() {
+    const { progress } = useProgress();
+    return <Html center>{progress.toFixed(0)} % loaded</Html>;
+}
 
-    const checkFileExistence = async (filePaths) => {
-        const results = await Promise.all(
-            filePaths.map((path) =>
-                fetch(path, { method: 'HEAD' })
-                    .then((res) => res.ok)
-                    .catch(() => false)
-            )
-        );
-        return results.every(Boolean);
-    };
-    
+
+function GLTF() {
+    const { scene } = useGLTF('/models/model.glb');
+
     return (
-        <primitive
-            object={geom}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-        />
+        <>
+            {/* The model */}
+            <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+                <primitive object={scene} />
+            </group>
+        </>
     );
 }
 
 const RaycastModel = () => {
     return (
-        
-        <ModelRender 
-            objUrl="/objs/coarse.obj"
-            mtlUrl="/objs/coarse.mtl"
-            scale={[10, 10, 10]}
-            position={[0, 0, 0]}
-            rotation={[0, 0, 0]}
-        />
+        <>
+            <Suspense fallback={<Loader />}>
+            <GLTF />
+            </Suspense>
+        </>
     );
 };
 export default RaycastModel;

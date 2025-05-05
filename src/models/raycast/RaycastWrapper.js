@@ -116,7 +116,7 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
   const toggleLabel = () => {
     setLabelActive(!labelActive);
   }
-  const TranslucentBoxComponent = components.find(c => c.name === "Filter slit");
+  const TranslucentBoxComponent = components.find(c => c.name === "Beamsplitter");
 
   return (
     <div style={{ display: 'flex', height: '400px', width: '100%' }}>
@@ -129,11 +129,10 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
       >
 
         {/* Ambient Light to brighten the entire scene */}
-        <ambientLight intensity={1} />
-
-        {/* PointLights in two locations to fully illuminate the scene */}
-        <pointLight position={[-10, -10, -10]} decay={0} intensity={2} />
-        <pointLight position={[10, 10, 10]} decay={0} intensity={2} />
+        <ambientLight intensity={0.2} />
+        <pointLight position={[-10, -10, -10]} decay={2} intensity={0.8} />
+        <pointLight position={[10, 10, 10]} decay={2} intensity={0.8} />
+        <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow />
         {/* 
         Example of how to include the translucent box for fine-tuning compnoent bounds*/}
         
@@ -156,7 +155,11 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
         <OrbitControls
           enableZoom
           enablePan
-          enableRotate />
+          enableRotate
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={Math.PI / 3}
+        />
+
         <RaycastHandler onFaceClick={handleFaceClick} />
       </Canvas>
     </div>

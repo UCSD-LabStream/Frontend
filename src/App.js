@@ -261,13 +261,13 @@ function App() {
 					
 
 					{/* default view */}
-					<div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "" : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
-						<div className={(webcamExpand ? "flex-col " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
-							<div className="relative flex-1 w-full bg-slate-300 rounded-md overflow-hidden">
-								<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
-								<video className="top-0 left-0 absolute h-full w-full object-cover" id="video0" autoPlay></video>
+					<div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "mr-[15%] " : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
+						<div className={(webcamExpand ? "flex-col items-end " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
+							<div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
+									<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
+									<video className="top-0 left-0 absolute h-full w-full object-cover" id="video0" autoPlay></video>
 							</div>
-							<div className="relative flex-1 bg-slate-300 rounded-md overflow-hidden">
+							<div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
 								<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(2)} /></IconButton>
 								<video className="top-0 left-0 absolute h-full w-full object-cover" id="video1" autoPlay></video>
 							</div>

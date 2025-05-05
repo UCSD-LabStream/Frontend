@@ -23,6 +23,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SlotsCalendar from './SlotsCalendar.js';
 import StreamHost from './StreamHost.js';
 import HostRoute from './components/hostRoute.js';
+import Dashboard from './pages/Dashboard.js';
 
 
 const theme = createTheme({
@@ -102,6 +103,7 @@ root.render(
         <Route path="/splashscreen/Trial" element={<Trial/>} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<App />} />
+          <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/booking" element={<Booking />} />
           

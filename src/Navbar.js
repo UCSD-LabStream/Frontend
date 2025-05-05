@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -55,8 +55,10 @@ export const NavBar = () => {
         })
       : allPages.filter((page) => page !== 'Log Out');  
 
+    console.log(useLocation().pathname == "/splashscreen")
+
     return (
-      <AppBar position="sticky" sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
+      <AppBar sx={{ ...(useLocation().pathname == '/splashscreen' && {visibility: 'hidden',}), ...(useLocation().pathname != '/splashscreen' && {position: 'sticky',}), boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Diversity2Icon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

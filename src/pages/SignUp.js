@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
 import { auth } from '../Firebase/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 // import 'materialize-css/dist/css/materialize.min.css';
 import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
 
@@ -49,9 +49,9 @@ const SignUp = () => {
     };
 
     return (
-        <Container style={{ marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
+        <Container style={{ position: 'relative', width: '40vw', marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
         <form onSubmit={handleSignup}>
-          <Typography variant="h4" align="center" gutterBottom>
+          <Typography variant="h3" fontWeight="bold" align="center" marginTop="2rem" gutterBottom>
             Sign Up
           </Typography>
   
@@ -61,7 +61,7 @@ const SignUp = () => {
             </Typography>
           )}
   
-          <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <TextField
               id="email"
               label="Email"
@@ -75,7 +75,7 @@ const SignUp = () => {
             />
           </div>
   
-          <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <TextField
               id="password"
               label="Password"
@@ -89,7 +89,7 @@ const SignUp = () => {
             />
           </div>
   
-          <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: '10px' }}>
             <TextField
               id="confirmPassword"
               label="Confirm Password"
@@ -103,18 +103,25 @@ const SignUp = () => {
             />
           </div>
   
-          <div style={{ marginTop: '20px' }}>
+          <div className="flex justify-center mt-7">
             <Button
               type="submit"
               variant="contained"
               color="primary"
               fullWidth
-              disabled={isLoading || password !== confirmPassword}
+              disabled={isLoading}
+              sx={{
+                height: '3rem',
+                fontWeight: 'bold'
+              }}
             >
-              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
+              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign up'}
             </Button>
           </div>
         </form>
+        <Typography sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          Have an account? <Link to="/splashscreen/Login"><span className="inline-block mx-1 underline">Login</span></Link>instead.
+        </Typography>
       </Container>
     );
 };

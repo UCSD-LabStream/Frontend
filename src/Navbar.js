@@ -55,10 +55,11 @@ export const NavBar = () => {
         })
       : allPages.filter((page) => page !== 'Log Out');  
 
-    console.log(useLocation().pathname == "/splashscreen")
+    // list of URLs where the navbar should not appear
+    const noNavbarURLs = ['/splashscreen', '/splashscreen/Login', '/splashscreen/SignUp']
 
     return (
-      <AppBar sx={{ ...(useLocation().pathname == '/splashscreen' && {visibility: 'hidden',}), ...(useLocation().pathname != '/splashscreen' && {position: 'sticky',}), boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
+      <AppBar sx={{ ...(noNavbarURLs.includes(useLocation().pathname) && {visibility: 'hidden',}), ...(!noNavbarURLs.includes(useLocation().pathname) && {position: 'sticky',}), boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Diversity2Icon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

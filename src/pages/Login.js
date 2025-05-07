@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signOut} from "firebase/auth";
 import { auth } from '../Firebase/firebase';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom'; 
 // import 'materialize-css/dist/css/materialize.min.css';
-import { TextField, Button, CircularProgress, Typography, Container } from '@mui/material';
+import { TextField, Button, CircularProgress, Typography, Container, Box } from '@mui/material';
 import { useUser } from '../components/UserContext';
 
 const Login = () => {
@@ -38,59 +38,68 @@ const Login = () => {
     };
 
     return (
-    <Container sx={{ marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
-      <form onSubmit={handleLogin}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Login
-        </Typography>
+      <>
+        <Container style={{ position: 'relative', width: '40vw', marginTop: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
+          <form onSubmit={handleLogin}>
+            <Typography variant="h3" fontWeight="bold" align="center" marginTop="2rem" gutterBottom>
+              Login
+            </Typography>
 
-        {error && (
-          <Typography color="error" align="center" paragraph>
-            {error}
+            {error && (
+              <Typography color="error" align="center" paragraph>
+                {error}
+              </Typography>
+            )}
+
+            <div style={{ marginBottom: '10px' }}>
+              <TextField
+                id="email"
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                required
+                variant="outlined"
+                margin="normal"
+              />
+            </div>
+
+            <div style={{ marginBottom: '10px' }}>
+              <TextField
+                id="password"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                required
+                variant="outlined"
+                margin="normal"
+              />
+            </div>
+
+            <div className="flex justify-center mt-7">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={isLoading}
+                sx={{
+                  height: '3rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Log in'}
+              </Button>
+            </div>
+          </form>
+          <Typography sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            Don't have an account? <Link to="/splashscreen/SignUp"><span className="inline-block mx-1 underline">Sign up</span></Link>instead.
           </Typography>
-        )}
-
-        <div style={{ marginBottom: '16px' }}>
-          <TextField
-            id="email"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            required
-            variant="outlined"
-            margin="normal"
-          />
-        </div>
-
-        <div style={{ marginBottom: '16px' }}>
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            required
-            variant="outlined"
-            margin="normal"
-          />
-        </div>
-
-        <div style={{ marginTop: '20px' }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={isLoading}
-          >
-            {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
-          </Button>
-        </div>
-      </form>
-    </Container>
+        </Container>
+        </>
     );
 };
 

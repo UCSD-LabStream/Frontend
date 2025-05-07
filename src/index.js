@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Box } from '@mui/material';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import App from './App';
@@ -72,13 +73,13 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#23486A',
+      main: '#1976d2',
     },
     secondary: {
       main: '#EFB036',
     },
     background: {
-      default: '#3B6790',
+      default: 'white',
     },
     text: {
       primary: '#000000',
@@ -95,6 +96,43 @@ root.render(
     <ThemeProvider theme={theme}>
     <CssBaseline />
     <BrowserRouter>
+      {/* Set up background color and gradient */}
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+      {/* Grid */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+            linear-gradient(0deg, rgba(25,118,210,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(25,118,210,0.07) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+        }}
+        />
+      {/* Circular Gradient Accent */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '-10%',
+          right: '-10%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(25,118,210,0.1) 0%, rgba(25,118,210,0) 70%)',
+          zIndex: -2,
+        }}
+      />
       <NavBar />
       <Routes>
         <Route path="/splashscreen" element={<SplashScreen/>} />
@@ -118,6 +156,7 @@ root.render(
           </Route>
         </Route>
       </Routes>
+      </Box>
     </BrowserRouter>
     </ThemeProvider>
     </LocalizationProvider>

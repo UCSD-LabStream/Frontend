@@ -40,45 +40,7 @@ function SplashScreen() {
   ];
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
-      {/* Decorative Background Grid */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(0deg, rgba(25,118,210,0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(25,118,210,0.07) 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px',
-          zIndex: 1,
-        }}
-      />
-
-      {/* Circular Gradient Accent */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '-10%',
-          right: '-10%',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(25,118,210,0.1) 0%, rgba(25,118,210,0) 70%)',
-          zIndex: 0,
-        }}
-      />
-
+      <>
       <Container
         maxWidth="lg"
         sx={{
@@ -295,7 +257,7 @@ function SplashScreen() {
           </Typography>
         </Box>
       </Container>
-    </Box>
+      </>
   );
 }
 

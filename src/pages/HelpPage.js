@@ -25,20 +25,16 @@ const HelpPage = () => {
                 mt: 4,
                 mb: 4,
                 padding: 4,
-                borderRadius: 2,
             }}
         >
             <Typography
-                variant="h4"
+                variant="h3"
+                sx={{ fontWeight: 'bold' }}
                 gutterBottom
             >
                 Help & Support
             </Typography>
-            <Typography
-                // variant="body1"
-                color='textSecondary'
-                paragraph
-            >
+            <Typography sx={{ marginBottom: '20px' }}>
                 Welcome to the help section! Below are answers to some frequently asked questions. If you need further assistance, please contact our support team.
             </Typography>
 

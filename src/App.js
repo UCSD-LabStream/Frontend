@@ -158,7 +158,7 @@ function App() {
 			<Toaster position="bottom-left"  />
 
 			<Grid container spacing={2} backgroundColor="background" sx={{padding: '10px'}}>
-				<Grid container order={modelExpand ? 1 : 2} size={modelExpand ? 12 : 6} className="relative" sx={{ transition: 'all 0.3s ease', height: `87vh`, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px'}}>					
+				<Grid container order={modelExpand ? 1 : 2} size={modelExpand ? 12 : 6} className="relative" sx={{ transition: 'all 0.3s ease', height: `87vh`, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px', border: '1px solid #ccc'}}>					
 					
 					<div style={{ width: '100%' }}>
 						<Stack direction="row" spacing={2} sx={{justifyContent: "space-between", alignItems: "center"}}>

@@ -90,11 +90,8 @@ function Box({ minX, maxX, minY, maxY, minZ, maxZ }) {
   );
 }
 
-function RaycastWrapper({ setComponent, setDescription, children }) {
-  const [labelPosition, setLabelPosition] = useState([0, 0, 0]);
+function RaycastWrapper({ component, setComponent, setDescription, children }) {
   const [labelActive, setLabelActive] = useState(false);
-  const [labelTitle, setLabelTitle] = useState("");
-  const [labelDesc, setLabelDesc] = useState("");
   const [orbPosition, setOrbPosition] = useState([0, 0, 0]);
 
   const orbRef = useRef();
@@ -144,7 +141,7 @@ function RaycastWrapper({ setComponent, setDescription, children }) {
         minZ={TranslucentBoxComponent.minZ}
         maxZ={TranslucentBoxComponent.maxZ}
     />  */}
-        {labelActive &&
+        {component &&
             <mesh position={orbPosition} ref={orbRef}>
               <sphereGeometry args={[0.1, 16, 16]} />
               <meshStandardMaterial color="red" />

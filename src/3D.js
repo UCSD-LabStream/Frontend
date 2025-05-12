@@ -8,6 +8,14 @@ import WideTextCard from './components/WideTextCard';
 function ThreeD() {
     const [selectedComponent, setComponent] = useState("");
     const [description, setDescription] = useState("");
+
+
+    // handler for the x button to close the label
+    const handleClose = () => {
+        setComponent("");
+        setDescription("");
+    };
+
     return (
         <div style={{ marginTop: 0, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
             {selectedComponent && 
@@ -17,9 +25,10 @@ function ThreeD() {
                 <WideTextCard 
                     title={selectedComponent}
                     content={description}
+                    onClose={handleClose}
                 />
             }
-            <RaycastWrapper setComponent={setComponent} setDescription={setDescription}>
+            <RaycastWrapper component={selectedComponent} setComponent={setComponent} setDescription={setDescription}>
                         <RaycastModel />
             </RaycastWrapper>
         </div>

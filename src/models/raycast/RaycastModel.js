@@ -14,7 +14,7 @@ function GLTF() {
     return (
         <>
             {/* The model */}
-            <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+            <group rotation={[0, 0, 0]} scale={0.01}>
                 <primitive object={scene} />
             </group>
         </>

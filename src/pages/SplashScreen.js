@@ -109,7 +109,6 @@ function SplashScreen() {
           sx={{
             width: '100%',
             maxWidth: '1000px',
-            height: '450px',
             borderRadius: '16px',
             overflow: 'hidden',
             background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',

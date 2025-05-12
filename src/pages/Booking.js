@@ -80,7 +80,7 @@ const Booking = () => {
     console.log("other emails: ", otherEmailsList);
 
     return (
-        <Container sx={{ marginTop: '50px', marginBottom: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
+        <Container sx={{ position: 'relative', zIndex: 10, marginTop: '50px', marginBottom: '50px', padding: '20px', borderRadius: "15px", backgroundColor: 'white' }}>
             <form onSubmit={handleSubmit}>
                 <Typography variant="h4" fontWeight="bold" align="center" gutterBottom>
                 Lab Booking
@@ -114,7 +114,7 @@ const Booking = () => {
                     />
                 </div>
 
-                <Typography variant="h6" align="center" gutterBottom>
+                <Typography variant="h6" align="center" sx={{ marginTop: '20px' }} gutterBottom>
                 Select one time slot
                 </Typography>
                 <Typography variant="body2" align="center">

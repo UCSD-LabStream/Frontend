@@ -154,11 +154,11 @@ function App() {
 	}, [])
 
 	return (
-		<body>
+		<body className='bg-transparent'>
 			<Toaster position="bottom-left"  />
 
-			<Grid container spacing={2} backgroundColor="background" sx={{padding: '10px'}}>
-				<Grid container order={modelExpand ? 1 : 2} size={modelExpand ? 12 : 6} className="relative" sx={{ transition: 'all 0.3s ease', height: `87vh`, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px', border: '1px solid #ccc'}}>					
+			<Grid container spacing={2} sx={{padding: '10px', backgroundColor: 'transparent'}}>
+				<Grid container order={modelExpand ? 1 : 2} size={modelExpand ? 12 : 6} className="relative" sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px', transition: 'all 0.3s ease', height: `87vh`, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px' }}>					
 					
 					<div style={{ width: '100%' }}>
 						<Stack direction="row" spacing={2} sx={{justifyContent: "space-between", alignItems: "center"}}>
@@ -179,7 +179,7 @@ function App() {
 									<Typography className="p-2 w-[200px] bg-slate-100">To learn more about a component, click on it in the model. Left-click and drag to rotate the scene. Right-click and drag to pan. Scroll to zoom.</Typography>
 								</Popover>
 							</Stack>
-							<Button variant='contained' onClick={handleModelExpand}> 
+							<Button variant='text' onClick={handleModelExpand}> 
 								{modelExpand ? <>COLLAPSE</> : <>EXPAND</>}
 							</Button>
 						</Stack>
@@ -189,7 +189,7 @@ function App() {
 					}
 					</div>
 					
-					<div className="flex gap-4 absolute bottom-5 left-5 border-4 p-4 rounded-md bg-white">
+					<div className="absolute flex gap-4 p-4 bg-white border-4 rounded-md bottom-5 left-5">
 						<div className="flex flex-col flex-1 gap-4">
 							<div className="flex w-full">
 								<Typography textAlign='left' className="flex flex-col justify-center">Filter motor left-right</Typography>
@@ -260,10 +260,10 @@ function App() {
 					</div>
 				</Grid>
 
-				<Grid order={webcamExpand ? 1 : 3} size={webcamExpand ? 12 : 6} sx={{ transition: 'all 0.3s ease', height: '87vh', backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px'}}>
+				<Grid order={webcamExpand ? 1 : 3} size={webcamExpand ? 12 : 6} sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px', transition: 'all 0.3s ease', height: '87vh', zIndex: 2, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px'}}>
 					<div style={{ width: '100%' }}>
 						<Stack direction="row" spacing={2} sx={{ justifyContent: "flex-end", alignItems: "center"}}>
-							<Button variant='contained' onClick={handleWebcamExpand}>
+							<Button variant='text' onClick={handleWebcamExpand}>
 								{webcamExpand ? <>COLLAPSE</> : <>EXPAND</>}
 							</Button>
 						</Stack>
@@ -272,8 +272,8 @@ function App() {
 					{/* expanded view */}
 					<div className={videoExpand == 0 ? "hidden" : "flex justify-center h-full w-full"}>
 						<div className="h-[80%] w-[50vw] max-w-full mt-4 bg-slate-300 rounded-md overflow-hidden relative">
-							<IconButton className="z-10 absolute"><CloseFullscreen onClick={() => handleVideoExpand(0)} /></IconButton>
-							<video ref={videoExpandRef} className="top-0 left-0 absolute h-full w-full object-cover" autoPlay></video>
+							<IconButton className="absolute z-10"><CloseFullscreen onClick={() => handleVideoExpand(0)} /></IconButton>
+							<video ref={videoExpandRef} className="absolute top-0 left-0 object-cover w-full h-full" autoPlay></video>
 						</div>
 					</div>
 					
@@ -282,17 +282,17 @@ function App() {
 					<div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "mr-[15%] " : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
 						<div className={(webcamExpand ? "flex-col items-end " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
 							<div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
-									<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
-									<video className="top-0 left-0 absolute h-full w-full object-cover" id="video0" autoPlay></video>
+									<IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
+									<video className="absolute top-0 left-0 object-cover w-full h-full" id="video0" autoPlay></video>
 							</div>
 							<div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
-								<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(2)} /></IconButton>
-								<video className="top-0 left-0 absolute h-full w-full object-cover" id="video1" autoPlay></video>
+								<IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(2)} /></IconButton>
+								<video className="absolute top-0 left-0 object-cover w-full h-full" id="video1" autoPlay></video>
 							</div>
 						</div>
 						<div className="relative flex-1 bg-slate-300 rounded-md overflow-hidden w-[55%] h-full">
-							<IconButton className="z-10 absolute"><OpenInFull onClick={() => handleVideoExpand(3)} /></IconButton>
-							<video className="top-0 left-0 absolute h-full w-full object-cover" id="video2" autoPlay></video>
+							<IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(3)} /></IconButton>
+							<video className="absolute top-0 left-0 object-cover w-full h-full" id="video2" autoPlay></video>
 						</div>
 					</div>
 				</Grid>

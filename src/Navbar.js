@@ -75,6 +75,7 @@ export const NavBar = () => {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                cursor: 'pointer'
               }}
               onClick={() => navigate('/')}
             >
@@ -105,7 +106,12 @@ export const NavBar = () => {
                 <Button
                   key={page}
                   onClick={() => handleNavigation(page)}
-                  sx={{ my: 2, color: 'white', display: 'block', mr: 3 }}
+                  variant='text'
+                  sx={{ fontWeight: '500', color: 'white', mr: 3, 
+                    ':hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.1)'
+                    }
+                  }}
                 >
                   {page}
                 </Button>

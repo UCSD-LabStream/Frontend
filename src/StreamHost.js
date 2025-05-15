@@ -50,6 +50,7 @@ function StreamHost() {
         });
 
         peer.on('disconnected', function() {
+            console.log("currently disconnected...")
 			peer.reconnect()
 		})
         

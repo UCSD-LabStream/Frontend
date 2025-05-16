@@ -29,7 +29,7 @@ const Login = () => {
                 return; // Don't proceed if the email is not verified
             }
             setUser(userCredential.user);
-            navigate('/'); 
+            navigate('/dashboard'); 
         } catch (error) {
             setError("Unsuccessful login. Please try again");
         } finally {

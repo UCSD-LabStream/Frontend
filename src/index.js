@@ -25,6 +25,7 @@ import SlotsCalendar from './SlotsCalendar.js';
 import StreamHost from './StreamHost.js';
 import HostRoute from './components/hostRoute.js';
 import Dashboard from './pages/Dashboard.js';
+import Brewster from "./pages/Brewster.js"
 
 
 const theme = createTheme({
@@ -139,6 +140,8 @@ root.render(
         <Route path="/splashscreen/Login" element={<Login/>} />
         <Route path="/splashscreen/Signup" element={<SignUp/>} />
         <Route path="/splashscreen/Trial" element={<Trial/>} />
+        <Route path="/Brewster" element={<Brewster/>} />
+
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<App />} />
           <Route path="/dashboard" element={<Dashboard/>} />

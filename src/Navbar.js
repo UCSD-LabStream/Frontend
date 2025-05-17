@@ -11,7 +11,7 @@ import { useUser } from './components/UserContext';
 import { signOut } from 'firebase/auth';
 import { auth } from './Firebase/firebase';
 
-const allPages = ['Help', 'Booking', 'Slots', 'Host', 'Log Out'];
+const allPages = ['Help', 'Booking', 'Slots', 'Host', 'Brewster', 'Log Out'];
 
 export const NavBar = () => {
     const navigate = useNavigate();

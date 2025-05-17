@@ -17,7 +17,6 @@ const Brewster = () => {
 
     // stores motor speed values
     const [motorInput, handleSpeedUpdate] = useState({
-        imageMotor: 0,
         filterMotor: 0
     });
 
@@ -80,7 +79,7 @@ const Brewster = () => {
                     duration: 5000
                 });
                 socket_connection.current = socket;
-                socket.emit('gear_state');
+                socket.emit('brewsters_gear_state');
             })
 
             socket.on('filter_limit', (state) => {
@@ -218,21 +217,21 @@ return (
                                     <GreenLED isOn={isFilterHomeLEDOn} />	
 							    </div>
                                 <div style={{display: 'flex', alignItems: 'center', marginLeft: '50px' }}>
-                                    <Typography textAlign='left' className="flex flex-col justify-center">Rotation motor</Typography>
+                                    <Typography textAlign='left' className="flex flex-col justify-center">Filter motor</Typography>
                                 </div>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: -1 * (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: -1 * (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
+                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: -1 * (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: -1 * (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
                                     <RotateLeft color={motorInput.filterMotor < 0 ? 'secondary' : ''}/>
                                 </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 0}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: 0})}}  disabled={isFilterHoming}>
+                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 0}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: 0})}}  disabled={isFilterHoming}>
                                     <Pause />
                                 </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
+                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
                                     <RotateRight color={(motorInput.filterMotor == 1 || motorInput.filterMotor == 2) ? 'secondary' : ''} />
                                 </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)}); handleFilterTwoTimes(!isFilterTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)})}} disabled={isFilterHoming}>
+                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)}); handleFilterTwoTimes(!isFilterTwoTimes); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)})}} disabled={isFilterHoming}>
                                     <FastForward color={isFilterTwoTimes ? 'secondary' : ''}/>
                                 </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 3}); handleFilterTwoTimes(false); setIsFilterHoming(true); setTimeout(() =>  {handleSpeedUpdate({ ...motorInputRef.current, filterMotor: 0 }); setIsFilterHoming(false)}, 30000); toastFilterHoming = toast('Filter motor is homing', { icon: '⚠️', position: "bottom-right", duration: 30000 }); socket_connection.current.emit('adjust', {gear: 1, value: 3})}}>
+                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 3}); handleFilterTwoTimes(false); setIsFilterHoming(true); setTimeout(() =>  {handleSpeedUpdate({ ...motorInputRef.current, filterMotor: 0 }); setIsFilterHoming(false)}, 30000); toastFilterHoming = toast('Filter motor is homing', { icon: '⚠️', position: "bottom-right", duration: 30000 }); socket_connection.current.emit('brewsters_adjust', {value: 3})}}>
                                     <Home color={motorInput.filterMotor == 3 ? 'secondary' : ''} />
                                 </IconButton>
                             

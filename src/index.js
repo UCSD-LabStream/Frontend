@@ -142,6 +142,8 @@ root.render(
         <Route path="/splashscreen/Login" element={<Login/>} />
         <Route path="/splashscreen/Signup" element={<SignUp/>} />
         <Route path="/splashscreen/Trial" element={<Trial/>} />
+        <Route path="/Brewster" element={<Brewster/>} />
+
         <Route element={<ProtectedRoutes />}>
           <Route element={<LabProtectedRoute />}>
             <Route path="/" element={<App />} />

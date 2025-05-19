@@ -4,13 +4,23 @@ import { useEffect, useState, useRef } from "react";
 
 function StreamHost() {
 
+    // references to video tags to be able to add streams as their src object
     const videoRefs = useRef([]);
 
-    const [isPopulated, populateVideos] = useState(false)
+    // required to re-render the videos
+    const [isPopulated, populateVideos] = useState(0)
+    
+    // holds the streams
+    // the refs are necessary here since the websockets use the initial state
     const [streams, addStreams] = useState([])
     const streamsRef = useRef([])
+
+    // tags the streams as fourier or brewster (or any other exp)
     const [streamTags, changeStreamTags] = useState([])
     const streamTagsRef = useRef([])
+
+    const [hostId, changeHostId] = useState('')
+    
     function handleStreamTags(event, index) {
         const newTags = streamTags.map((tag, i) => {
             if (i === index) {
@@ -19,17 +29,13 @@ function StreamHost() {
                 return tag
             }
         })
-        console.log(newTags)
         changeStreamTags(newTags)
-        console.log(streamTags)
     }
 
-    function initVideos() {
+    useEffect(() => {
         const init = async () => {
             // required to access enumerateDevices
             await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-
-            console.log('uhh.. got video yet??')
       
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
@@ -38,25 +44,18 @@ function StreamHost() {
       
             for (let i = 0; i < videoDevices.length; i++) {
                 tempStreams.push(await navigator.mediaDevices.getUserMedia({video: {deviceId: videoDevices[i].deviceId}, audio: false}));
-                //document.getElementById('main-page').innerHTML += `<video autoplay playsinline id='video${i}'></video>`;
         
                 if (i != 0) {
                     tempStreams[0].addTrack(tempStreams[i].getVideoTracks()[0]);
                 }
             }
 
-            console.log('is empty...?', tempStreams)
             addStreams(tempStreams)
-
-            // for (let i = 0; i < videoDevices.length; i++) {
-            //     document.getElementById(`video${i}`).srcObject = streams[i]
-            // }
-
-            changeStreamTags(Array(streams.length).fill('fourier'))
-            populateVideos(true)
+            changeStreamTags(Array(tempStreams.length).fill('fourier'))
+            populateVideos(isPopulated + 1) // reruns the code for populating the video tags
         };
         init();
-    }
+    }, [])
 
     useEffect(() => {
         streamsRef.current = streams
@@ -67,23 +66,32 @@ function StreamHost() {
     }, [streamTags])
 
     useEffect(() => {
-        async function populateVideos() {
-            await initVideos()
-            videoRefs.current.forEach((video, index) => {
-            if (video && streams) {
+
+        // prevents the abort error
+        if (streams.length === 0) {
+            return
+        }
+        
+        videoRefs.current.forEach((video, index) => {
+            if (video) {
+                video.pause()
+                console.log(video)
+                console.log(streams[index])
                 video.srcObject = streams[index]
+                video.play()
             }
         })
-        }
-        populateVideos()
+        //})
+        
+        //populateVideos()
         
     }, [isPopulated])
 
-    var peer = new Peer();
+    
     let call;
-    let hostId;
 
     useEffect(() => {
+        const peer = new Peer();
 
         const socket = io.connect('https://labstream.ucsd.edu', {
             path: '/camera',
@@ -91,7 +99,7 @@ function StreamHost() {
         });
 
         peer.on('open', function(id) {
-            hostId = id;
+            changeHostId(id)
         });
 
         peer.on('disconnected', function() {
@@ -119,7 +127,6 @@ function StreamHost() {
 	
 	    socket.on('viewer_join', (event) => {
             let options = {metadata: streamTagsRef.current};
-            console.log(streamsRef.current)
             call = peer.call(event, streamsRef.current[0], options)
         })
     }, [])
@@ -128,7 +135,6 @@ function StreamHost() {
         <div id="main-page" className="flex">
             { [...Array(4).keys()].map((index) => {
                 return (<div className="z-10">
-                    {console.log(streams)}
                     <video autoplay playsinline ref={el => videoRefs.current[index] = el} id={`video${index}`}></video>
                     <select onChange={(event) => {handleStreamTags(event, index)}}>
                         <option>fourier</option>

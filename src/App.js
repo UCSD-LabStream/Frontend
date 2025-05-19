@@ -117,14 +117,20 @@ function App() {
 			call.on('stream', (stream) => {
 				let videoTracks = stream.getVideoTracks();
 				let tempStreams = {} // necessary since useState doesn't save correctly in for loop
+				let currVideoIndex = 0;
 				for (let i = 0; i < videoTracks.length; i++) {
 					// THIS IS ONLY IN CASE THE VIDEO DOESN'T ALREADY EXIST IN DOM
 					// if (!document.getElementById(`video${i}`)) {
 					// 	document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
 					// }
 
-					tempStreams[`video${i}`] = new MediaStream([videoTracks[i]])
-					document.getElementById(`video${i}`).srcObject = new MediaStream([videoTracks[i]]);
+					if (call.metadata[i] !== 'fourier') {
+						continue
+					}
+
+					tempStreams[`video${currVideoIndex}`] = new MediaStream([videoTracks[i]])
+					document.getElementById(`video${currVideoIndex}`).srcObject = new MediaStream([videoTracks[i]]);
+					currVideoIndex += 1
 				}
 				addStream({...tempStreams})
 			})

@@ -136,14 +136,20 @@ const Brewster = () => {
             call.on('stream', (stream) => {
                 let videoTracks = stream.getVideoTracks();
                 let tempStreams = {} // necessary since useState doesn't save correctly in for loop
+                let currVideoIndex = 0;
                 for (let i = 0; i < videoTracks.length; i++) {
                     // THIS IS ONLY IN CASE THE VIDEO DOESN'T ALREADY EXIST IN DOM
                     // if (!document.getElementById(`video${i}`)) {
                     // 	document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
                     // }
 
-                    tempStreams[`video${i}`] = new MediaStream([videoTracks[i]])
-                    document.getElementById(`video${i}`).srcObject = new MediaStream([videoTracks[i]]);
+                    if (call.metadata[i] !== 'brewster') {
+						continue
+					}
+
+                    tempStreams[`video${currVideoIndex}`] = new MediaStream([videoTracks[i]])
+                    document.getElementById(`video${currVideoIndex}`).srcObject = new MediaStream([videoTracks[i]]);
+                    currVideoIndex += 1
                 }
                 addStream({...tempStreams})
             })
@@ -254,29 +260,9 @@ return (
                     </div>
 
                     {/* expanded view */}
-                    <div className={videoExpand == 0 ? "hidden" : "flex justify-center h-full w-full"}>
+                    <div className="flex justify-center w-full h-full">
                         <div className="h-[80%] w-[50vw] max-w-full mt-4 bg-slate-300 rounded-md overflow-hidden relative">
-                            <IconButton className="absolute z-10"><CloseFullscreen onClick={() => handleVideoExpand(0)} /></IconButton>
-                            <video ref={videoExpandRef} className="absolute top-0 left-0 object-cover w-full h-full" autoPlay></video>
-                        </div>
-                    </div>
-                    
-
-                    {/* default view */}
-                    <div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "mr-[15%] " : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
-                        <div className={(webcamExpand ? "flex-col items-end " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
-                            <div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
-                                    <IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>
-                                    <video className="absolute top-0 left-0 object-cover w-full h-full" id="video0" autoPlay></video>
-                            </div>
-                            <div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
-                                <IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(2)} /></IconButton>
-                                <video className="absolute top-0 left-0 object-cover w-full h-full" id="video1" autoPlay></video>
-                            </div>
-                        </div>
-                        <div className="relative flex-1 bg-slate-300 rounded-md overflow-hidden w-[55%] h-full">
-                            <IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(3)} /></IconButton>
-                            <video className="absolute top-0 left-0 object-cover w-full h-full" id="video2" autoPlay></video>
+                            <video id='video0' className="absolute top-0 left-0 object-cover w-full h-full" autoPlay></video>
                         </div>
                     </div>
                 </Grid>

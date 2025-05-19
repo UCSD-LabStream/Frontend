@@ -74,6 +74,7 @@ function StreamHost() {
         
         videoRefs.current.forEach((video, index) => {
             if (video) {
+                console.log('at index', index)
                 video.pause()
                 console.log(video)
                 console.log(streams[index])
@@ -81,9 +82,6 @@ function StreamHost() {
                 video.play()
             }
         })
-        //})
-        
-        //populateVideos()
         
     }, [isPopulated])
 

@@ -121,8 +121,7 @@ function App() {
 					// if (!document.getElementById(`video${i}`)) {
 					// 	document.getElementById('main-page').innerHTML += `<video playsinline autoplay id='video${i}'></video>`;
 					// }
-					console.log(stream)
-					console.log(call.metadata)
+					
 					if (call.metadata[i] !== 'fourier') {
 						continue
 					}

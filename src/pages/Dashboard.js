@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Card, CardContent, Button, Container } from '@mui/material';
 import { useUser } from '../components/UserContext';
 import readSlots from '../components/Read';
+import { useNavigate } from 'react-router-dom';
+import { useLabAccess } from '../components/LabAccessContext';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { setCanAccessLab } = useLabAccess();
   const { user } = useUser();
   const now = new Date();
   const [slotsData, setSlotsData] = useState([]);
@@ -20,7 +24,7 @@ const Dashboard = () => {
     if (user) {
       fetchData();
     }
-  }, [user]); // Fetch data when user changes (e.g., login/logout)
+  }, [user]);
 
   const isCurrentBooking = (start, end) => {
     const startDate = new Date(start);
@@ -28,23 +32,36 @@ const Dashboard = () => {
     return now >= startDate && now <= endDate;
   };
 
+  const handleEnterLab = () => {
+    setCanAccessLab(true);
+    navigate('/');
+  };
+
   const formatDate = (timestamp) => {
     if (timestamp && timestamp.seconds) {
-      const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
-      return date.toLocaleString(); // You can format this however you'd like
+      const date = new Date(timestamp.seconds * 1000);
+      return date.toLocaleString();
     }
     return '';
   };
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{ color: 'black', fontWeight: 'bold' }}
-      >
-        Hello, {user?.displayName || user?.email || 'User'}
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography
+          variant="h4"
+          sx={{ color: 'black', fontWeight: 'bold' }}
+        >
+          Hello, {user?.displayName || user?.email || 'User'}
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{ backgroundColor: '#1976d2' }}
+          onClick={handleEnterLab}
+        >
+          Enter Lab
+        </Button>
+      </Box>
 
       <Typography variant="h6" gutterBottom>
         Your Upcoming Bookings
@@ -53,13 +70,9 @@ const Dashboard = () => {
       <Box display="flex" flexDirection="column" gap={2}>
         {slotsData.length > 0 ? (
           slotsData.map((booking) => {
-            // Format the startTime and endTime
             const start = formatDate(booking.startTime);
             const end = formatDate(booking.endTime);
-
             const isNow = isCurrentBooking(start, end);
-
-            // Always show "Enter Lab" for booking id 1 or if it's the current time
             const shouldShowEnterLab = isNow || booking.id === 1;
 
             return (
@@ -73,13 +86,21 @@ const Dashboard = () => {
                         Time: {start} – {end}
                       </Typography>
                     </Box>
-                    {shouldShowEnterLab && (
+                    {shouldShowEnterLab ? (
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: '#1976d2', height: 'fit-content' }}
-                        onClick={() => alert(`Navigating to lab ${booking.labName}`)}
+                        onClick={handleEnterLab}
                       >
                         Enter Lab
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        disabled
+                        sx={{ backgroundColor: '#757575', color: 'white', height: 'fit-content' }}
+                      >
+                        Lab opens soon
                       </Button>
                     )}
                   </Box>

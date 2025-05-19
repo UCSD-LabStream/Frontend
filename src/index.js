@@ -25,6 +25,8 @@ import SlotsCalendar from './SlotsCalendar.js';
 import StreamHost from './StreamHost.js';
 import HostRoute from './components/hostRoute.js';
 import Dashboard from './pages/Dashboard.js';
+import { LabAccessProvider } from './components/LabAccessContext.js';
+import LabProtectedRoute from './components/LabProtectedRoute.js';
 
 
 const theme = createTheme({
@@ -92,6 +94,7 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserProvider>
+    <LabAccessProvider>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <ThemeProvider theme={theme}>
     <CssBaseline />
@@ -140,11 +143,13 @@ root.render(
         <Route path="/splashscreen/Signup" element={<SignUp/>} />
         <Route path="/splashscreen/Trial" element={<Trial/>} />
         <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<App />} />
+          <Route element={<LabProtectedRoute />}>
+            <Route path="/" element={<App />} />
+          </Route>
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/booking" element={<Booking />} />
-          
+
           <Route element={<HostRoute />}>
             <Route path="/Host" element={<StreamHost />} />
           </Route>
@@ -160,6 +165,7 @@ root.render(
     </BrowserRouter>
     </ThemeProvider>
     </LocalizationProvider>
+    </LabAccessProvider>
   </UserProvider>
 );
 

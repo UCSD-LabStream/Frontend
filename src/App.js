@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import './App.scss';
 import {io} from "socket.io-client";
 import { Peer } from 'peerjs';
-import { IconButton, Typography, Stack, Switch, Button, Popover } from '@mui/material'
+import { IconButton, Typography, Stack, Switch, Button, Popover, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2'
 import ThreeD from './3D';
@@ -17,13 +17,27 @@ function App() {
 	const connecting = useRef(false);
 	const socket_connection = useRef(null);
 
+
+	// keep track of which motor is selected for adjustment
+	const [selectedMotor, setSelectedMotor] = useState("Filter motor");
+
 	// stores motor speed values
-	const [motorInput, handleSpeedUpdate] = useState({
-        imageMotorH: "stop",
-		imageMotorV: "stop",
-		filterMotorH: "stop",
-		filterMotorV: "stop",
-    });
+	// [filterMotorH, filterMotorV, imageMotorH, imageMotorV]
+	const [motorInput, handleSpeedUpdate] = useState(["stop", "stop", "stop", "stop"]);
+
+	const updateSpeed = (motorOnPage, dir) => {
+
+		// calculate the real gear index based on which motor was clicked on screen
+		let gearIndex = selectedMotor === "Filter motor" ? motorOnPage : motorOnPage + 2;
+		socket_connection.current.emit('adjust', {gear: (gearIndex), value: dir})
+
+		// since we cannot directly update motorInput, use a copy to set motorInput[motor] = value
+		let newMotorInput = [...motorInput];
+		// array indexed from 0, gears are indexed from 1
+		newMotorInput[gearIndex - 1] = dir;
+		console.log("new state: ", newMotorInput);
+		handleSpeedUpdate(newMotorInput);
+	}
 
 	// stores state of 2x button
 	// const [isFilterTwoTimes, handleFilterTwoTimes] = useState(false)
@@ -85,7 +99,7 @@ function App() {
             // there is a new gear state, update the gear
             socket.on('gear', (data) => {
                 // set_gear_state(data);
-				handleSpeedUpdate({imageMotorH : "stop", imageMotorV : "stop", filterMotorH : "stop", filterMotorV : "stop"})
+				handleSpeedUpdate(["stop", "stop", "stop", "stop"]);
                 toast.success('Gear State has been retrieved or updated.',  {
                     duration: 5000
                 });
@@ -193,75 +207,59 @@ function App() {
 					}
 					</div>
 					
-					<div className="absolute flex gap-4 p-4 bg-white border-4 rounded-md bottom-5 left-5">
-						<div className="flex flex-col flex-1 gap-4">
+					<div className="absolute flex flex-col gap-4 p-4 bg-white border-4 rounded-md bottom-5 left-5">
+						{/* Select Component */}
+						<FormControl style={{ width: '50%' }}>
+							<InputLabel id="motor-select-label">Select Motor</InputLabel>
+							<Select
+								labelId="motor-select-label"
+								value={selectedMotor}
+								label="Select Motor"
+								onChange={(e) => setSelectedMotor(e.target.value)}
+							>
+							<MenuItem value="Filter motor">Filter motor</MenuItem>
+							<MenuItem value="Image motor">Image motor</MenuItem>
+							</Select>
+						</FormControl>
+
+						{/* Motor Control Panels */}
+						<div className="flex gap-4">
+							<div className="flex flex-col flex-1 gap-4">
 							<div className="flex w-full">
-								<Typography textAlign='left' className="flex flex-col justify-center">Filter motor left-right</Typography>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorH: "ccw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: "ccw"})}}>
-									<RotateLeft color={motorInput.filterMotorH === "ccw" ? 'secondary' : ''} />
+								<Typography textAlign='left' className="flex flex-col justify-center">
+								{selectedMotor} {selectedMotor == "Image motor" ? "left-right" : "rotation"}
+								</Typography>
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(1, "ccw") }}>
+								<RotateLeft color={motorInput[selectedMotor === "Filter motor" ? 0 : 2] === "ccw" ? 'secondary' : ''} />
 								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorH: "stop"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: "stop"})}}>
-									<Pause />
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(1, "stop") }}>
+								<Pause />
 								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorH: "cw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 1, value: "cw"})}}>
-									<RotateRight color={motorInput.filterMotorH === "cw" ? 'secondary' : ''} />
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(1, "cw") }}>
+								<RotateRight color={motorInput[selectedMotor === "Filter motor" ? 0 : 2] === "cw" ? 'secondary' : ''} />
 								</IconButton>
-								{/* <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)}); handleImageTwoTimes(!isImageTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)})}}>
-									<FastForward color={isImageTwoTimes ? 'secondary' : ''}/>
-								</IconButton> */}
+							</div>
 							</div>
 
+							<div className="flex flex-col gap-4">
 							<div className="flex w-full">
-								<Typography textAlign='left' className="flex flex-col justify-center">Filter motor up-down</Typography>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorV: "ccw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: "ccw"})}}>
-									<RotateLeft color={motorInput.filterMotorV === "ccw" ? 'secondary' : ''} />
+								<Typography textAlign='left' className="flex flex-col justify-center">
+								{selectedMotor} {selectedMotor == "Image motor" ? "up-down" : "open-close"}
+								</Typography>
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(2, "ccw") }}>
+								<RotateLeft color={motorInput[selectedMotor === "Filter motor" ? 1 : 3] === "ccw" ? 'secondary' : ''} />
 								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorV: "stop"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: "stop"})}}>
-									<Pause />
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(2, "stop") }}>
+								<Pause />
 								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotorV: "cw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: "cw"})}}>
-									<RotateRight color={motorInput.filterMotorV === "cw" ? 'secondary' : ''} />
+								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(2, "cw") }}>
+								<RotateRight color={motorInput[selectedMotor === "Filter motor" ? 1 : 3] === "cw" ? 'secondary' : ''} />
 								</IconButton>
-								{/* <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)}); handleImageTwoTimes(!isImageTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)})}}>
-									<FastForward color={isImageTwoTimes ? 'secondary' : ''}/>
-								</IconButton> */}
 							</div>
-
-						</div>
-						<div className="flex flex-col gap-4">
-							<div className="flex w-full">
-								<Typography textAlign='left' className="flex flex-col justify-center">Image motor left-right</Typography>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorH: "ccw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 3, value: "ccw"})}}>
-									<RotateLeft color={motorInput.imageMotorH === "ccw" ? 'secondary' : ''} />
-								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorH: "stop"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 3, value: "stop"})}}>
-									<Pause />
-								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorH: "cw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 3, value: "cw"})}}>
-									<RotateRight color={motorInput.imageMotorH === "cw" ? 'secondary' : ''} />
-								</IconButton>
-								{/* <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)}); handleImageTwoTimes(!isImageTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)})}}>
-									<FastForward color={isImageTwoTimes ? 'secondary' : ''}/>
-								</IconButton> */}
-							</div>
-
-							<div className="flex w-full">
-								<Typography textAlign='left' className="flex flex-col justify-center">Image motor up-down</Typography>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorV: "ccw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 4, value: "ccw"})}}>
-									<RotateLeft color={motorInput.imageMotorV === "ccw" ? 'secondary' : ''} />
-								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorV: "stop"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 4, value: "stop"})}}>
-									<Pause />
-								</IconButton>
-								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotorV: "cw"}); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 4, value: "cw"})}}>
-									<RotateRight color={motorInput.imageMotorV === "cw" ? 'secondary' : ''} />
-								</IconButton>
-								{/* <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, imageMotor: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)}); handleImageTwoTimes(!isImageTwoTimes); console.log(motorInput); socket_connection.current.emit('adjust', {gear: 2, value: motorInput.imageMotor * (isImageTwoTimes ? 0.5 : 2)})}}>
-									<FastForward color={isImageTwoTimes ? 'secondary' : ''}/>
-								</IconButton> */}
 							</div>
 						</div>
-					</div>
+						</div>
+
 				</Grid>
 
 				<Grid order={webcamExpand ? 1 : 3} size={webcamExpand ? 12 : 6} sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px', transition: 'all 0.3s ease', height: '87vh', zIndex: 2, backgroundColor: 'white', color: 'black', padding: '20px', borderRadius: '15px'}}>

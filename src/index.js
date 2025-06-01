@@ -27,6 +27,7 @@ import HostRoute from './components/hostRoute.js';
 import Dashboard from './pages/Dashboard.js';
 import { LabAccessProvider } from './components/LabAccessContext.js';
 import LabProtectedRoute from './components/LabProtectedRoute.js';
+import Brewster from './pages/Brewster.js';
 
 
 const theme = createTheme({

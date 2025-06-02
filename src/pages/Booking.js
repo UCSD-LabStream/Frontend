@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 // import M from 'materialize-css';
 import readSlots from '../components/Read';
 import updateBookingData from '../components/Write';
-import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Typography, Container } from '@mui/material';
+import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Typography, Container, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 
 const Booking = () => {
@@ -13,6 +13,7 @@ const Booking = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [slotsData, setSlotsData] = useState([]);
+    const [experiment, setExperiment] = useState('');
     // selected slot state management
     const [selectedSlot, setSelectedSlot] = useState(null);
 
@@ -85,6 +86,20 @@ const Booking = () => {
                 <Typography variant="h4" fontWeight="bold" align="center" gutterBottom>
                 Lab Booking
                 </Typography>
+
+                <FormControl fullWidth margin="normal">
+                <InputLabel id="experiment-label">Select Experiment</InputLabel>
+                <Select
+                    labelId="experiment-label"
+                    id="experiment-select"
+                    value={experiment}
+                    label="Select Experiment"
+                    onChange={(e) => setExperiment(e.target.value)}
+                >
+                    <MenuItem value="Fourier Optics">Fourier Optics</MenuItem>
+                    <MenuItem value="Brewster">Brewster</MenuItem>
+                </Select>
+                </FormControl>
 
                 {error && (
                 <Typography color="error" align="center">

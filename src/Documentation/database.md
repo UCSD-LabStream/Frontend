@@ -33,7 +33,7 @@ To support multiple experiments, each experiment should have its own collection 
 Example Collection Names
 Brewster
 
-Fourier_optics
+Fourier_optics - currently called "slots" in the database 
 
 Each collection will contain documents in the format described above. Collections can be created dynamically based on professor input or a predefined list of experiments.
 

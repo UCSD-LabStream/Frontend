@@ -40,6 +40,11 @@ Component for booking lab time slots using React and Material UI.
 - Select button is only enabled for available slots
 - Error messages for no slot selected or failed booking
 
+## Support for booking multiple experiments
+
+- There is a UI component at the top which gives users a drop down option to select the experiment they want to book
+- based on this selection, the correct databse collection for that experiemnt will be accessed (TODO)
+
 ## Dependencies
 ```bash
 npm install @mui/material @emotion/react @emotion/styled

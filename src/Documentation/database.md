@@ -1,4 +1,4 @@
-# Database Design: Experiment Slot Booking System
+# Database Design
 
 This document explains the Firebase database structure used for managing booking slots for experiments created by professors and booked by students. It also outlines how the system can be extended to support multiple experiments.
 

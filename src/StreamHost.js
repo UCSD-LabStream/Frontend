@@ -8,7 +8,7 @@ function StreamHost() {
     const videoRefs = useRef([]);
 
     // required to re-render the videos
-    const [isPopulated, populateVideos] = useState(0)
+    const [isPopulated, populateVideos] = useState(false)
     
     // holds the streams
     // the refs are necessary here since the websockets use the initial state
@@ -45,14 +45,14 @@ function StreamHost() {
             for (let i = 0; i < videoDevices.length; i++) {
                 tempStreams.push(await navigator.mediaDevices.getUserMedia({video: {deviceId: videoDevices[i].deviceId}, audio: false}));
         
-                if (i != 0) {
+                if (i !== 0) {
                     tempStreams[0].addTrack(tempStreams[i].getVideoTracks()[0]);
                 }
             }
 
             addStreams(tempStreams)
             changeStreamTags(Array(tempStreams.length).fill('fourier'))
-            populateVideos(isPopulated + 1) // reruns the code for populating the video tags
+            populateVideos(true) // reruns the code for populating the video tags
         };
         init();
     }, [])
@@ -74,19 +74,13 @@ function StreamHost() {
         
         videoRefs.current.forEach((video, index) => {
             if (video) {
-                console.log('at index', index)
                 video.pause()
-                console.log(video)
-                console.log(streams[index])
                 video.srcObject = streams[index]
                 video.play()
             }
         })
         
-    }, [isPopulated])
-
-    
-    let call;
+    }, [isPopulated, streams])
 
     useEffect(() => {
         const peer = new Peer();
@@ -125,16 +119,16 @@ function StreamHost() {
 	
 	    socket.on('viewer_join', (event) => {
             let options = {metadata: streamTagsRef.current};
-            call = peer.call(event, streamsRef.current[0], options)
+            let call = peer.call(event, streamsRef.current[0], options)
         })
     }, [])
 
     return (
-        <div id="main-page" className="flex">
-            { [...Array(4).keys()].map((index) => {
-                return (<div className="z-10">
-                    <video autoplay playsinline ref={el => videoRefs.current[index] = el} id={`video${index}`}></video>
-                    <select onChange={(event) => {handleStreamTags(event, index)}}>
+        <div id="main-page" className="m-5 flex justify-center gap-5">
+            { [...Array(streams.length).keys()].map((index) => {
+                return (<div className="z-10 relative">
+                    <video autoplay playsinline className="rounded-md" ref={el => videoRefs.current[index] = el} id={`video${index}`}></video>
+                    <select className="absolute top-5 left-5 rounded-md p-1" onChange={(event) => {handleStreamTags(event, index)}}>
                         <option>fourier</option>
                         <option>brewster</option>
                     </select>

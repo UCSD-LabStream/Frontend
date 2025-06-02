@@ -4,12 +4,11 @@ import './App.scss';
 import {io} from "socket.io-client";
 import { Peer } from 'peerjs';
 import { IconButton, Typography, Stack, Switch, Button, Popover, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
-import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2'
 import ThreeD from './3D';
 import toast, {Toaster} from "react-hot-toast";
 
-import { OpenInFull, CloseFullscreen, Pause, RotateRight, RotateLeft, FastForward, InfoOutlined } from '@mui/icons-material';
+import { OpenInFull, CloseFullscreen, Pause, RotateRight, RotateLeft, InfoOutlined } from '@mui/icons-material';
 
 const SOCKET_URL = 'https://labstream.ucsd.edu';
 
@@ -70,7 +69,7 @@ function App() {
 	const videoExpandRef = useRef(null)
 	const handleVideoExpand = (videoId) => {
 		expandVideo(videoId)
-		if (videoExpandRef.current != null && videoId != 0) {
+		if (videoExpandRef.current !== null && videoId !== 0) {
 			videoExpandRef.current.srcObject = streams["video" + (videoId - 1)]
 		}
 	}
@@ -202,7 +201,7 @@ function App() {
 							</Button>
 						</Stack>
 					{is3D ? 
-					<><img src="/ThorLabsKit.png" style={{ width: '80%', height: 'auto', objectFit: 'cover' }} /></> : 
+					<><img alt="overview of the thorlabs fourier experiment" src="/ThorLabsKit.png" style={{ width: '80%', height: 'auto', objectFit: 'cover' }} /></> : 
 					<><ThreeD></ThreeD></>
 					}
 					</div>
@@ -227,7 +226,7 @@ function App() {
 							<div className="flex flex-col flex-1 gap-4">
 							<div className="flex w-full">
 								<Typography textAlign='left' className="flex flex-col justify-center">
-								{selectedMotor} {selectedMotor == "Image motor" ? "left-right" : "rotation"}
+								{selectedMotor} {selectedMotor === "Image motor" ? "left-right" : "rotation"}
 								</Typography>
 								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(1, "ccw") }}>
 								<RotateLeft color={motorInput[selectedMotor === "Filter motor" ? 0 : 2] === "ccw" ? 'secondary' : ''} />
@@ -244,7 +243,7 @@ function App() {
 							<div className="flex flex-col gap-4">
 							<div className="flex w-full">
 								<Typography textAlign='left' className="flex flex-col justify-center">
-								{selectedMotor} {selectedMotor == "Image motor" ? "up-down" : "open-close"}
+								{selectedMotor} {selectedMotor === "Image motor" ? "up-down" : "open-close"}
 								</Typography>
 								<IconButton style={{ backgroundColor: 'transparent' }} onClick={() => { updateSpeed(2, "ccw") }}>
 								<RotateLeft color={motorInput[selectedMotor === "Filter motor" ? 1 : 3] === "ccw" ? 'secondary' : ''} />
@@ -272,7 +271,7 @@ function App() {
 					</div>
 
 					{/* expanded view */}
-					<div className={videoExpand == 0 ? "hidden" : "flex justify-center h-full w-full"}>
+					<div className={videoExpand === 0 ? "hidden" : "flex justify-center h-full w-full"}>
 						<div className="h-[80%] w-[50vw] max-w-full mt-4 bg-slate-300 rounded-md overflow-hidden relative">
 							<IconButton className="absolute z-10"><CloseFullscreen onClick={() => handleVideoExpand(0)} /></IconButton>
 							<video ref={videoExpandRef} className="absolute top-0 left-0 object-cover w-full h-full" autoPlay></video>
@@ -281,7 +280,7 @@ function App() {
 					
 
 					{/* default view */}
-					<div className={(videoExpand == 0 ? "" : "hidden ") + (webcamExpand ? "mr-[15%] " : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
+					<div className={(videoExpand === 0 ? "" : "hidden ") + (webcamExpand ? "mr-[15%] " : "flex-col ") + "h-[80%] mt-4 flex gap-4 items-center"}>
 						<div className={(webcamExpand ? "flex-col items-end " : "") + "flex-1 flex gap-4 overflow-hidden h-full w-full"}>
 							<div className="relative flex-1 w-[60%] bg-slate-300 rounded-md overflow-hidden">
 									<IconButton className="absolute z-10"><OpenInFull onClick={() => handleVideoExpand(1)} /></IconButton>

@@ -38,7 +38,7 @@ const SignUp = () => {
             await signOut(auth);
             setError("Please verify your email before logging in.");
             setTimeout(() => {
-              navigate('/splashscreen/Login');
+              navigate('/Login');
           }, 3000);
             
         } catch (error) {
@@ -120,7 +120,7 @@ const SignUp = () => {
           </div>
         </form>
         <Typography sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          Have an account? <Link to="/splashscreen/Login"><span className="inline-block mx-1 underline">Login</span></Link>instead.
+          Have an account? <Link to="/Login"><span className="inline-block mx-1 underline">Login</span></Link>instead.
         </Typography>
       </Container>
     );

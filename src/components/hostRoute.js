@@ -8,7 +8,7 @@ const HostRoute = () => {
     if (hosts.includes(user.email)) {
         return <Outlet />;
     } else{
-        return <Navigate to="/"/>
+        return <Navigate to="/FourierOptics"/>
     }
 
 }

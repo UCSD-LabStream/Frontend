@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const handleEnterLab = () => {
     setCanAccessLab(true);
-    navigate('/');
+    navigate('/FourierOptics');
   };
 
   const formatDate = (timestamp) => {

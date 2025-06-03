@@ -215,36 +215,63 @@ return (
                     }
                     </div>
                     
-                    <div className="absolute flex gap-4 p-4 bg-white border-4 rounded-md bottom-5 left-5">
-                        <div className="flex flex-col flex-1 gap-4">
-                            <div className="flex w-full">
-                                <div style={{ display: 'flex', alignItems: 'center', marginRight: 'auto', gap: '10px' }}>
+                    <div className="absolute w-full flex gap-1 p-4 scale-95 box-border bg-white border-4 rounded-md bottom-5 left-0">
+                        <div className="flex flex-col flex-1 gap-2">
+                            <div className="flex w-full justify-between items-center gap-5">
+                                <div className="flex items-center gap-1">
                                     <Typography>Home</Typography>
-                                    <GreenLED isOn={isFilterHomeLEDOn} />	
-							    </div>
-                                <div style={{display: 'flex', alignItems: 'center', marginLeft: '50px' }}>
-                                    <Typography textAlign='left' className="flex flex-col justify-center">Filter motor</Typography>
+                                    <GreenLED isOn={isFilterHomeLEDOn} />
                                 </div>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: -1 * (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: -1 * (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
-                                    <RotateLeft color={motorInput.filterMotor < 0 ? 'secondary' : ''}/>
-                                </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 0}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: 0})}}  disabled={isFilterHoming}>
-                                    <Pause />
-                                </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: (isFilterTwoTimes ? 2 : 1)}); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: (isFilterTwoTimes ? 2 : 1)}); setFilterHomeLEDOn(false)}} disabled={isFilterHoming}>
-                                    <RotateRight color={(motorInput.filterMotor == 1 || motorInput.filterMotor == 2) ? 'secondary' : ''} />
-                                </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)}); handleFilterTwoTimes(!isFilterTwoTimes); console.log(motorInput); socket_connection.current.emit('brewsters_adjust', {value: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2)})}} disabled={isFilterHoming}>
-                                    <FastForward color={isFilterTwoTimes ? 'secondary' : ''}/>
-                                </IconButton>
-                                <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {handleSpeedUpdate({...motorInput, filterMotor: 3}); handleFilterTwoTimes(false); setIsFilterHoming(true); setTimeout(() =>  {handleSpeedUpdate({ ...motorInputRef.current, filterMotor: 0 }); setIsFilterHoming(false)}, 30000); toastFilterHoming = toast('Filter motor is homing', { icon: '⚠️', position: "bottom-right", duration: 30000 }); socket_connection.current.emit('brewsters_adjust', {value: 3})}}>
-                                    <Home color={motorInput.filterMotor == 3 ? 'secondary' : ''} />
-                                </IconButton>
-                            
-                                 <div style={{display: 'flex', alignItems: 'center', marginLeft: '50px', width: '50px'}}>
-                                    <Typography> {filterDistance} mm</Typography>
+                                <div className="flex items-center justify-center gap-1">
+                                    <Typography style={{ whiteSpace: 'nowrap' }}>Filter motor</Typography>
+                                    <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {
+                                        handleSpeedUpdate({ ...motorInput, filterMotor: -1 * (isFilterTwoTimes ? 2 : 1) });
+                                        socket_connection.current.emit('brewsters_adjust', { value: -1 * (isFilterTwoTimes ? 2 : 1) });
+                                        setFilterHomeLEDOn(false);
+                                    }} disabled={isFilterHoming}>
+                                        <RotateLeft color={motorInput.filterMotor < 0 ? 'secondary' : ''} />
+                                    </IconButton>
+                                    <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {
+                                        handleSpeedUpdate({ ...motorInput, filterMotor: 0 });
+                                        socket_connection.current.emit('brewsters_adjust', { value: 0 });
+                                    }} disabled={isFilterHoming}>
+                                        <Pause />
+                                    </IconButton>
+                                    <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {
+                                        handleSpeedUpdate({ ...motorInput, filterMotor: (isFilterTwoTimes ? 2 : 1) });
+                                        socket_connection.current.emit('brewsters_adjust', { value: (isFilterTwoTimes ? 2 : 1) });
+                                        setFilterHomeLEDOn(false);
+                                    }} disabled={isFilterHoming}>
+                                        <RotateRight color={(motorInput.filterMotor === 1 || motorInput.filterMotor === 2) ? 'secondary' : ''} />
+                                    </IconButton>
+                                    <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {
+                                        handleSpeedUpdate({ ...motorInput, filterMotor: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2) });
+                                        handleFilterTwoTimes(!isFilterTwoTimes);
+                                        socket_connection.current.emit('brewsters_adjust', { value: motorInput.filterMotor * (isFilterTwoTimes ? 0.5 : 2) });
+                                    }} disabled={isFilterHoming}>
+                                        <FastForward color={isFilterTwoTimes ? 'secondary' : ''} />
+                                    </IconButton>
+                                    <IconButton style={{ backgroundColor: 'transparent' }} onClick={() => {
+                                        handleSpeedUpdate({ ...motorInput, filterMotor: 3 });
+                                        handleFilterTwoTimes(false);
+                                        setIsFilterHoming(true);
+                                        setTimeout(() => {
+                                            handleSpeedUpdate({ ...motorInputRef.current, filterMotor: 0 });
+                                            setIsFilterHoming(false);
+                                        }, 30000);
+                                        toastFilterHoming = toast('Filter motor is homing', {
+                                            icon: '⚠️',
+                                            position: "bottom-right",
+                                            duration: 30000
+                                        });
+                                        socket_connection.current.emit('brewsters_adjust', { value: 3 });
+                                    }}>
+                                        <Home color={motorInput.filterMotor === 3 ? 'secondary' : ''} />
+                                    </IconButton>
                                 </div>
-							
+                                <div className="flex items-center justify-end">
+                                    <Typography>{filterDistance} mm</Typography>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -259,7 +286,6 @@ return (
                         </Stack>
                     </div>
 
-                    {/* expanded view */}
                     <div className="flex justify-center w-full h-full">
                         <div className="h-[80%] w-[50vw] max-w-full mt-4 bg-slate-300 rounded-md overflow-hidden relative">
                             <video id='video0' className="absolute top-0 left-0 object-cover w-full h-full" autoPlay></video>
@@ -281,7 +307,7 @@ return (
             borderRadius: '50%',
             boxShadow: isOn ? '0 0 8px limegreen' : 'none',
             transition: 'background-color 0.3s, box-shadow 0.3s',
-            margin: 'auto'
+            margin: 10
         }}
         />
     );

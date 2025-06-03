@@ -139,15 +139,15 @@ root.render(
       />
       <NavBar />
       <Routes>
-        <Route path="/splashscreen" element={<SplashScreen/>} />
-        <Route path="/splashscreen/Login" element={<Login/>} />
-        <Route path="/splashscreen/Signup" element={<SignUp/>} />
-        <Route path="/splashscreen/Trial" element={<Trial/>} />
+        <Route path="/" element={<SplashScreen/>} />
+        <Route path="/Login" element={<Login/>} />
+        <Route path="/Signup" element={<SignUp/>} />
+        <Route path="/Trial" element={<Trial/>} />
         <Route path="/Brewster" element={<Brewster/>} />
 
         <Route element={<ProtectedRoutes />}>
           <Route element={<LabProtectedRoute />}>
-            <Route path="/" element={<App />} />
+            <Route path="/FourierOptics" element={<App />} />
           </Route>
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/help" element={<HelpPage />} />

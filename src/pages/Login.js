@@ -96,7 +96,7 @@ const Login = () => {
             </div>
           </form>
           <Typography sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-            Don't have an account? <Link to="/splashscreen/SignUp"><span className="inline-block mx-1 underline">Sign up</span></Link>instead.
+            Don't have an account? <Link to="/SignUp"><span className="inline-block mx-1 underline">Sign up</span></Link>instead.
           </Typography>
         </Container>
         </>

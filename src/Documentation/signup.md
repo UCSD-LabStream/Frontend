@@ -32,7 +32,7 @@ A React + Firebase component that lets users create an account with email/passwo
   - Uses `createUserWithEmailAndPassword()` to register user
   - Calls `sendEmailVerification()` to trigger a verification email
   - Immediately signs out user with `signOut()`
-  - Redirects to `/splashscreen/Login` after a short delay
+  - Redirects to `/Login` after a short delay
 ---
 
 ## Firebase Auth Setup

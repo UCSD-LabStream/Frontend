@@ -3,7 +3,7 @@ import { useUser } from './UserContext';
 
 const ProtectedRoutes = () => {
     const { user } = useUser();
-    return user ? <Outlet/> : <Navigate to="/splashscreen"/>
+    return user ? <Outlet/> : <Navigate to="/"/>
 
 }
 

@@ -30,7 +30,7 @@ export const NavBar = () => {
           console.log("handling logout");
           await signOut(auth);
           setUser(null);
-          navigate('/splashscreen');
+          navigate('/');
         } catch (error) {
           console.error("Error logging out");
         }
@@ -56,7 +56,7 @@ export const NavBar = () => {
       : allPages.filter((page) => page !== 'Log Out');  
 
     // list of URLs where the navbar should not appear
-    const noNavbarURLs = ['/splashscreen', '/splashscreen/Login', '/splashscreen/SignUp']
+    const noNavbarURLs = ['/', '/Login', '/SignUp']
 
     return (
       <AppBar sx={{ ...(noNavbarURLs.includes(useLocation().pathname) && {visibility: 'hidden',}), ...(!noNavbarURLs.includes(useLocation().pathname) && {position: 'sticky',}), boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)' }}>
@@ -77,7 +77,7 @@ export const NavBar = () => {
                 textDecoration: 'none',
                 cursor: 'pointer'
               }}
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/FourierOptics')}
             >
               LabStream
             </Typography>

@@ -104,6 +104,39 @@ function App() {
                 });
                 console.log(data);
             }, 200);
+
+			socket.on('filter_motor_H_done', () => {
+				handleSpeedUpdate({filterMotorH : "stop"})
+				toast('Filter motor rotation limit reached', {
+					icon: '⚠️',
+					duration: 7000
+				});
+			}, 200);
+
+			socket.on('filter_motor_V_done', () => {
+				handleSpeedUpdate({filterMotorV : "stop"})
+				toast('Filter motor open-close limit reached', {
+					icon: '⚠️',
+					duration: 7000
+				});
+			}, 200);
+
+			socket.on('image_motor_H_done', () => {
+				handleSpeedUpdate({imageMotorH : "stop"})
+				toast('Image motor left-right limit reached', {
+					icon: '⚠️',
+					duration: 7000
+				});
+			}, 200);
+
+			socket.on('image_motor_V_done', () => {
+				handleSpeedUpdate({imageMotorV : "stop"})
+				toast('Image motor up-down limit reached', {
+					icon: '⚠️',
+					duration: 7000
+				});
+			}, 200);
+
         } catch(e) {
             toast.error('Failed to connect to the server');
         }

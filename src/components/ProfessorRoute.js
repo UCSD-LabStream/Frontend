@@ -8,7 +8,7 @@ const ProfessorRoute = () => {
     if (profs.includes(user.email)) {
         return <Outlet />;
     } else{
-        return <Navigate to="/"/>
+        return <Navigate to="/FourierOptics"/>
     }
 
 }

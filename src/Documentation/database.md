@@ -17,6 +17,7 @@ Each experiment has its own **collection** (also referred to as a table), with e
   "startTime": "2025-05-20T13:00:00Z", // Start time of the slot (timestamp in UTC)
   "endTime": "2025-05-20T14:00:00Z",   // End time of the slot (timestamp in UTC)
   "status": true,                      // Boolean: true if booked, false if available
+  "labname": "Brewster",
   "otherEmails": [                     // Optional: other student collaborators (emails)
     "student1@ucsd.edu",
     "student2@ucsd.edu"

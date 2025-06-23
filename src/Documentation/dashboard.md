@@ -41,7 +41,3 @@ This component serves as the main page for students after logging in. It shows t
 
 ---
 
-## Note for developers
-
-The enter lab button on the top right corner is only to make it easy to test when developing. This should be removed before releasing the app for students to use in classes. 
-

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
-import writeSlots from '../components/Write_slots';
+import { writeSlots, writeBrewsterSlots } from '../components/Write_slots';
 
 const SlotCreation = () => {
   const [formData, setFormData] = useState({

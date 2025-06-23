@@ -10,12 +10,15 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import { useUser } from './components/UserContext';
 import { signOut } from 'firebase/auth';
 import { auth } from './Firebase/firebase';
+import { useLabAccess } from './components/LabAccessContext';
 
-const allPages = ['Help', 'Booking', 'Slots', 'Host', 'Brewster', 'Log Out'];
+
+const allPages = ['Help', 'Booking', 'Slots', 'Host', 'Fourier Optics', 'Brewster', 'Log Out'];
 
 export const NavBar = () => {
     const navigate = useNavigate();
     const { user, setUser } = useUser();
+    const { setCanAccessLab } = useLabAccess();
     
     // Define your list of host users
     const hosts = ["rsrikanth@ucsd.edu", "wal009@ucsd.edu", "sabaghda@ucsd.edu", "hlonsdale@ucsd.edu", "prashk135@gmail.com"];
@@ -40,7 +43,12 @@ export const NavBar = () => {
     const handleNavigation = (page) => { 
       if (page === 'Log Out') { 
         handleLogOut(); 
-      } else {
+      } else if(page == "Fourier Optics"){
+        setCanAccessLab(true);
+        navigate('/FourierOptics');
+      }
+      else {
+        setCanAccessLab(true);
         navigate(`/${page}`);
       }
     };
@@ -51,6 +59,8 @@ export const NavBar = () => {
           if (page === 'Log Out') return true;
           if (page === 'Host') return isHost; // Only show Host if user is host
           if (page === 'Slots') return isProfessor;
+          if(page === 'Brewster') return isHost;
+          if(page === 'Fourier Optics') return isHost;
           return true;
         })
       : allPages.filter((page) => page !== 'Log Out');  
@@ -77,7 +87,7 @@ export const NavBar = () => {
                 textDecoration: 'none',
                 cursor: 'pointer'
               }}
-              onClick={() => navigate('/FourierOptics')}
+              onClick={() => navigate('/Dashboard')}
             >
               LabStream
             </Typography>

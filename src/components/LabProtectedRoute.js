@@ -9,7 +9,7 @@ const LabProtectedRoute = () => {
     return <Outlet />;
   } else {
     // Redirect if access not granted
-    return <Navigate to="/" replace />;
+    return <Navigate to="/Dashboard" replace />;
   }
 };
 

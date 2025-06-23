@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Card, CardContent, Button, Container } from '@mui/material';
 import { useUser } from '../components/UserContext';
-import readSlots from '../components/Read';
+import { readSlots, readBrewsterSlots } from '../components/Read';
 import { useNavigate } from 'react-router-dom';
 import { useLabAccess } from '../components/LabAccessContext';
 
 const Dashboard = () => {
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const navigate = useNavigate();
   const { setCanAccessLab } = useLabAccess();
   const { user } = useUser();
@@ -14,10 +15,25 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     if (user?.email) {
-      const slots = await readSlots();
-      const filteredSlots = slots.filter(slot => slot.bookedBy === user.email && new Date(slot.startTime.seconds * 1000) > now);
-      setSlotsData(filteredSlots);
-    }
+      const [fourierSlots, brewsterSlots] = await Promise.all([
+      readSlots(),
+      readBrewsterSlots()
+    ]);
+
+    const allSlots = [...fourierSlots, ...brewsterSlots];
+
+    const filteredSlots = allSlots.filter(slot => {
+      const isUserBooked =
+        slot.bookedBy === user.email ||
+        (Array.isArray(slot.otherEmails) && slot.otherEmails.includes(user.email));
+
+      const slotEnd = slot.endTime?.seconds ? new Date(slot.endTime.seconds * 1000) : new Date(slot.endTime);
+
+      return isUserBooked && slotEnd > now;
+    });
+
+    setSlotsData(filteredSlots);
+   }
   };
 
   useEffect(() => {
@@ -32,10 +48,17 @@ const Dashboard = () => {
     return now >= startDate && now <= endDate;
   };
 
-  const handleEnterLab = () => {
-    setCanAccessLab(true);
+ const handleEnterLab = () => {
+  setCanAccessLab(true);
+  if (!selectedSlot?.labName) return;
+  
+  if (selectedSlot.labName === 'Brewster') {
+    navigate('/Brewster');
+  } else {
     navigate('/FourierOptics');
-  };
+  }
+};
+
 
   const formatDate = (timestamp) => {
     if (timestamp && timestamp.seconds) {
@@ -54,13 +77,6 @@ const Dashboard = () => {
         >
           Hello, {user?.displayName || user?.email || 'User'}
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: '#1976d2' }}
-          onClick={handleEnterLab}
-        >
-          Enter Lab
-        </Button>
       </Box>
 
       <Typography variant="h6" gutterBottom>
@@ -90,7 +106,10 @@ const Dashboard = () => {
                       <Button
                         variant="contained"
                         sx={{ backgroundColor: '#1976d2', height: 'fit-content' }}
-                        onClick={handleEnterLab}
+                        onClick={() =>{
+                          setSelectedSlot(booking); 
+                          handleEnterLab();
+                        }}
                       >
                         Enter Lab
                       </Button>

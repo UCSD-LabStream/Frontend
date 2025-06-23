@@ -143,7 +143,9 @@ root.render(
         <Route path="/Login" element={<Login/>} />
         <Route path="/Signup" element={<SignUp/>} />
         <Route path="/Trial" element={<Trial/>} />
-        <Route path="/Brewster" element={<Brewster/>} />
+        <Route element={<LabProtectedRoute />}>
+          <Route path="/Brewster" element={<Brewster/>} />
+        </Route>
 
         <Route element={<ProtectedRoutes />}>
           <Route element={<LabProtectedRoute />}>

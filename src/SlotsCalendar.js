@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import writeSlots from './components/Write_slots';
-import readSlots from './components/Read';
+import { writeSlots, writeBrewsterSlots } from './components/Write_slots';
+import { readSlots, readBrewsterSlots } from './components/Read';
 import { getAuth } from "firebase/auth"; 
-import DeleteSlots from "./components/DeleteSlots";
+import { DeleteSlots, DeleteBrewsterSlots } from "./components/DeleteSlots";
 import CustomAlert from './components/CustomAlert';
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+
 
 // Utility function to get the date for a specific day of the current week
 const getDateOfWeek = (dayOffset) => {
@@ -23,11 +25,19 @@ const SlotsCalendar = () => {
   const [deletableSlots, setDeletableSlots] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [slotToDelete, setSlotToDelete] = useState(null); 
+  const [experiment, setExperiment] = useState(null);
   const auth = getAuth();
   const user = auth.currentUser;
 
   const fetchCreatedSlots = async () => {
-    const slots = await readSlots();
+    let slots = [];
+    if(experiment == 'Fourier Optics'){
+      slots = await readSlots();
+    } else if(experiment == 'Brewster'){
+      slots = await readBrewsterSlots();
+    } else{
+      return;
+    }
     const updatedDeletableSlots = [];
     const updatedMyCreatedSlots = []; // Store the slots created by the current user
   
@@ -90,6 +100,12 @@ const SlotsCalendar = () => {
   useEffect(() => {
     console.log("updated delete slots:", deletableSlots);
   }, [deletableSlots]);
+
+  useEffect(() => {
+  setSelectedTimes([]); // Clear selected times on experiment change
+  fetchCreatedSlots();  // Refetch slots for the new experiment
+}, [experiment]);
+
   
 
   const handleOnClick = (date, day, hour) => {
@@ -131,7 +147,13 @@ const SlotsCalendar = () => {
   const handleSubmit = () => {
     alert("Booking selected times.");
     selectedTimes.forEach(([startTime, endTime]) => {
-      writeSlots(startTime, endTime);
+      if (experiment === "Fourier Optics") {
+        writeSlots(startTime, endTime);
+      } else if (experiment === "Brewster") {
+        writeBrewsterSlots(startTime, endTime);
+      } else {
+        alert("Please select an experiment.");
+      }
     });
     //add it to bookedslot and mybookedslots
     setTimeout(() => {
@@ -143,7 +165,11 @@ const SlotsCalendar = () => {
     const endTime = slot.endTime.toDate().toLocaleString();
   
     alert(`Deleting a slot! ${startTime} to ${endTime}`);
-    DeleteSlots(slot.id);
+    if(experiment == 'Fourier Optics'){
+      DeleteSlots(slot.id);
+    } else if(experiment == 'Brewster'){
+      DeleteBrewsterSlots(slot.id);
+    }
     setTimeout(() => {
       window.location.reload();
     }, 3000);
@@ -152,6 +178,28 @@ const SlotsCalendar = () => {
 
   return (
     <div className="w-full p-4 overflow-x-auto">
+        <div className="w-full max-w-xs mx-auto mb-4">
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="experiment-label">Select Experiment</InputLabel>
+            <Select
+              labelId="experiment-label"
+              id="experiment-select"
+              value={experiment}
+              label="Select Experiment"
+              onChange={(e) => setExperiment(e.target.value)}
+            >
+              <MenuItem value="Fourier Optics">Fourier Optics</MenuItem>
+              <MenuItem value="Brewster">Brewster</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+      {!experiment ? (
+        <div className="text-center text-lg text-gray-600 mt-8">
+        Please select an experiment to view and book time slots.
+      </div>
+    ) : (
+      <>
       <div className="grid grid-cols-8 border border-gray-300">
         {/* Header Row */}
         <div className="border-r border-gray-300 bg-white p-2 text-center font-bold">Time</div>
@@ -199,30 +247,34 @@ const SlotsCalendar = () => {
 
               return (
                 <div
-                  key={timeString}
-                  className={`relative h-10 border-b border-gray-300 flex items-center justify-center cursor-pointer transition ${
-                    isMyBooked
-                      ? "bg-purple-500"
-                      : isBooked && !isMyBooked
-                      ? "bg-red-500"
-                      : selectedTimes.some(
-                          ([start, end]) =>
-                            start.toLocaleString() === new Date(timeString).toLocaleString()
-                        )
-                      ? "bg-green-500"
-                      : "bg-white hover:bg-green-300"
-                  }`}
-                  onClick={() => handleOnClick(date, day, hour)}
-                >
-                  {isMyBooked && isSlotDeletable && (
-                    <button
-                      onClick={() => handleDeleteSlot(bookedSlot)}
-                      className="absolute top-0 right-0 bg-red-600 text-white text-xs px-2 py-1 rounded-lg hover:bg-red-800 transition"
-                    >
-                      X
-                    </button>
-                  )}
-                </div>
+                    key={timeString}
+                    className={`relative z-10 h-10 border-b border-gray-300 flex items-center justify-center cursor-pointer transition ${
+                      isMyBooked
+                        ? "bg-purple-500"
+                        : isBooked && !isMyBooked
+                        ? "bg-red-500"
+                        : selectedTimes.some(
+                            ([start, end]) =>
+                              start.toLocaleString() === new Date(timeString).toLocaleString()
+                          )
+                        ? "bg-green-500"
+                        : "bg-white hover:bg-green-300"
+                    }`}
+                    onClick={() => handleOnClick(date, day, hour)}
+                  >
+                    {isMyBooked && isSlotDeletable && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // prevent cell click
+                          handleDeleteSlot(bookedSlot);
+                        }}
+                        className="absolute top-0 right-0 z-70 bg-red-600 text-white text-xs px-2 py-0.5 rounded-lg hover:bg-red-800 transition"
+                      >
+                        X
+                      </button>
+                    )}
+                  </div>
+
               );
             })}
 
@@ -248,7 +300,7 @@ const SlotsCalendar = () => {
 
 
       {/* Submit Button */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-6 relative z-50">
         <button
           onClick={handleSubmit}
           className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -256,6 +308,8 @@ const SlotsCalendar = () => {
           Submit
         </button>
       </div>
+      </>
+      )}
     </div>
   );
 };

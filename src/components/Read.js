@@ -13,4 +13,16 @@ const readSlots = async () => {
   }
 }
 
-export default readSlots;
+const readBrewsterSlots = async () => {
+  try {
+    const brewsterCollection = collection(labSlots, 'Brewster');
+    const querySnapshot = await getDocs(brewsterCollection);
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return data;
+  } catch (error) {
+    console.error("Error fetching Brewster data:", error);
+    return [];
+  }
+};
+
+export { readSlots, readBrewsterSlots };

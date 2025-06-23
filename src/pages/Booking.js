@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 // import 'materialize-css/dist/css/materialize.min.css';
 // import M from 'materialize-css';
-import readSlots from '../components/Read';
-import updateBookingData from '../components/Write';
+import { readSlots, readBrewsterSlots } from '../components/Read';
+import { updateBookingData, updateBrewsterBookingData } from '../components/Write';
 import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Typography, Container, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 
@@ -17,10 +17,34 @@ const Booking = () => {
     // selected slot state management
     const [selectedSlot, setSelectedSlot] = useState(null);
 
-    const fetchData = async () => {
-        const slots = await readSlots();
-        setSlotsData(slots);
-    }
+    const fetchData = async (experimentName) => {
+        setIsLoading(true);
+        setSlotsData([]);
+
+        try {
+            let slots = [];
+
+            if (experimentName === 'Fourier Optics') {
+            slots = await readSlots();
+            } else if (experimentName === 'Brewster') {
+            slots = await readBrewsterSlots();
+            }
+
+            setSlotsData(slots);
+        } catch (error) {
+            console.error("Error fetching slot data:", error);
+            setError("Failed to load slots. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+useEffect(() => {
+  if (experiment) {
+    fetchData(experiment);
+  }
+}, [experiment]);
+
 
     useEffect(() => {
         fetchData()
@@ -55,11 +79,20 @@ const Booking = () => {
 
         const primaryEmail = selectedSlot.email ? String(selectedSlot.email) : String(email);
         try {
-          await updateBookingData(
-            selectedSlot.id,
-            primaryEmail,
-            otherEmailsList
-          );
+            if(experiment === 'Fourier Optics'){
+                await updateBookingData(
+                    selectedSlot.id,
+                    primaryEmail,
+                    otherEmailsList
+                );
+            } else if(experiment === 'Brewster'){
+                await updateBrewsterBookingData(
+                    selectedSlot.id,
+                    primaryEmail,
+                    otherEmailsList
+                );
+            }
+          
           console.log("Booking submitted!");
           setSelectedSlot(null);
           setEmail('');
@@ -143,23 +176,25 @@ const Booking = () => {
                         <TableCell>Slot</TableCell>
                         <TableCell>Start Time</TableCell>
                         <TableCell>End Time</TableCell>
-                        <TableCell>Status</TableCell>
                         <TableCell>Book</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {slotsData.map((slot, index) => (
+                    {slotsData
+                        .filter(
+                        (slot) =>
+                            !slot.status && slot?.startTime?.toDate() > new Date() // unbooked & future
+                        )
+                        .map((slot, index) => (
                         <TableRow key={index}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>
                             {slot?.startTime?.toDate().toLocaleString() || 'Not Assigned Yet'}
-                        </TableCell>
-                        <TableCell>
+                            </TableCell>
+                            <TableCell>
                             {slot?.endTime?.toDate().toLocaleString() || 'Not Assigned Yet'}
-                        </TableCell>
-                        <TableCell>{String(slot?.status)}</TableCell>
-                        <TableCell>
-                            {!slot.status && (
+                            </TableCell>
+                            <TableCell>
                             <Button
                                 variant="contained"
                                 color={selectedSlot?.id === slot?.id ? 'secondary' : 'primary'}
@@ -167,15 +202,15 @@ const Booking = () => {
                             >
                                 Select
                             </Button>
-                            )}
-                        </TableCell>
+                            </TableCell>
                         </TableRow>
-                    ))}
+                        ))}
                     </TableBody>
                 </Table>
                 ) : (
                 <Typography align="center">No data available in the 'slots' collection.</Typography>
                 )}
+
 
                 {selectedSlot && (
                 <div style={{ marginTop: '20px' }}>
